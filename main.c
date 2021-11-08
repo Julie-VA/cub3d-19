@@ -47,6 +47,12 @@ int	main(int argc, char **argv)
 	t_map	*map;
 	int		i;
 
+	void	*mlx;
+	void	*mlx_win;
+	t_data	img;
+
+	
+
 	if (argc != 2 || !check_cub(argv[1]))
 	{
 		write(1, "Error\n", 6);
@@ -67,5 +73,13 @@ int	main(int argc, char **argv)
 	printf("e_texture=%s\n", map->e_texture);
 	printf("f_color=%s\n", map->f_color);
 	printf("c_color=%s\n", map->c_color);
+
+	mlx = mlx_init();
+	mlx_win = mlx_new_window(mlx, SCREEN_W, SCREEN_H, "RAYCAST!");
+	img.img = mlx_new_image(mlx, SCREEN_W, SCREEN_H);
+	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_len, &img.endian);
+	raycast(map->map_f, &img);
+	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
+	mlx_loop(mlx);
 	return (0);
 }

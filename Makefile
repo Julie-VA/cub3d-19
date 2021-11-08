@@ -9,10 +9,14 @@ INCLUDE		=	includes
 CFLAGS		=	-Wall -Wextra -Werror -I$(INCLUDE)
 RM			=	rm -f
 
-SRCS		=	main.c 			\
-				modgnl_utils.c	\
-				modgnl.c		\
-				read_file.c		\
+SRCS		=	main.c 				\
+				free.c				\
+				get_map.c			\
+				get_textures_pos.c	\
+				modgnl_utils.c		\
+				modgnl.c			\
+				parsing.c			\
+				read_file.c			\
 
 OBJS		=	$(SRCS:%.c=%.o)
 

@@ -18,8 +18,9 @@ typedef struct s_map
 	char	*e_texture;
 	char	*f_color;
 	char	*c_color;
-	int		p_pos;
-	int		p_ori;
+	int		p_pos_x;
+	int		p_pos_y;
+	char	p_ori;
 }	t_map;
 
 int		get_next_line(int fd, char **line);
@@ -28,5 +29,14 @@ char	*ft_modstrjoin(char const *s1, char const *s2);
 
 char	**read_file(char *argv);
 int		check_cub(char *str);
+
+int		free_all(t_map *map);
+
+int		parsing(char *argv, t_map *map);
+
+int		get_textures(t_map *map);
+int		get_pos(t_map *map);
+
+int		get_map(t_map *map);
 
 #endif

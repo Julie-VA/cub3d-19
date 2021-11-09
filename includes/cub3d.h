@@ -11,6 +11,13 @@
 
 #define SCREEN_W 1920
 #define SCREEN_H 1080
+#define EVENT_DEST 1
+
+# define KEY_A 0
+# define KEY_S 1
+# define KEY_D 2
+# define KEY_W 13
+# define KEY_ESC 53
 
 typedef struct s_map
 {
@@ -35,8 +42,8 @@ typedef struct s_icoord
 
 typedef struct s_fcoord
 {
-	float	x;
-	float	y;
+	double	x;
+	double	y;
 }			t_fcoord;
 
 typedef struct s_data {
@@ -48,7 +55,19 @@ typedef struct s_data {
 	int			endian;
 }				t_data;
 
+typedef struct s_mlx
+{
+	void*	win;
+	void*	mlx;
+	t_data*	img;
+	t_data*	black;
+}			t_mlx;
 
+t_fcoord	pPos;
+t_fcoord	pDir;
+t_fcoord	plane;
+
+void	set_px(t_data *data, t_icoord coord, unsigned int color);
 
 int		get_next_line(int fd, char **line);
 int		ft_modstrlen(const char *s, int mod);
@@ -56,7 +75,7 @@ char	*ft_modstrjoin(char const *s1, char const *s2);
 
 char	**read_file(char *argv);
 int		check_cub(char *str);
-int		raycast(char **worldmap, t_data *img);
+int		raycast(t_mlx *mlx);
 
 int		free_all(t_map *map);
 

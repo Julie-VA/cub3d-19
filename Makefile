@@ -6,7 +6,7 @@ LIBFT		=	$(addprefix $(LIBFT_DIR), $(LIBFT_A))
 
 CC			=	gcc
 INCLUDE		=	includes
-CFLAGS		=	-Wall -Wextra -Werror -I$(INCLUDE)
+CFLAGS		=	-Wall -Wextra -Werror -I$(INCLUDE) ##-fsanitize=address -g
 RM			=	rm -f
 
 SRCS		=	main.c 				\
@@ -31,7 +31,7 @@ $(LIBFT):
 			@$(MAKE) bonus -s -C $(LIBFT_DIR)
 
 .c.o:
-			@printf "\033[0;33mGenerating minishell objects... %-33.33s\r" $@
+			@printf "\033[0;33mGenerating cub3d objects... %-33.33s\r" $@
 			@$(CC) $(CFLAGS) -c $< -o $(<:.c=.o)
 
 localclean:

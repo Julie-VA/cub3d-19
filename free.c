@@ -8,6 +8,9 @@ int	free_all(t_map *map)
 	while (map->raw_file[i])
 		free(map->raw_file[i++]);
 	free(map->raw_file);
+	i = 0;
+	while (map->map_f[i])
+		free(map->map_f[i++]);
 	free(map->map_f);
 	free(map);
 	return (1);

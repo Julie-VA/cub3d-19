@@ -6,7 +6,7 @@
 /*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/10 14:47:40 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/10 14:49:20 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ int	raycast(t_mlx *mlx)
 
 		deltaDist.x = (rayDir.x == 0) ? 1e30 : fabs(1 / rayDir.x); 
 		deltaDist.y = (rayDir.y == 0) ? 1e30 : fabs(1 / rayDir.y); 
-
 		double	perpWallDist;
 
 		t_icoord	step;
@@ -107,10 +106,17 @@ int	raycast(t_mlx *mlx)
 			if (1/*mmap[map.x][map.y] > 0*/)
 				hit = 1;
 		}
+		int color;
 		if (side == 0)
+		{
+			color = 225;
 			perpWallDist = sideDist.x - deltaDist.x;
+		}
 		else
+		{
+			color = 225/2;
 			perpWallDist = sideDist.y - deltaDist.y;
+		}
 
 		double wall_x;
 

@@ -5,22 +5,27 @@ LIBFT_DIR	=	libft/
 LIBFT		=	$(addprefix $(LIBFT_DIR), $(LIBFT_A))
 
 MLX			=	mlx/libmlx.a
+MLX_DIR		=	mlx/
 LIB			=	-Lmlx -lz -lmlx -framework OpenGL -framework Appkit
 
 CC			=	gcc
 INCLUDE		=	includes
-CFLAGS		=	-fsanitize=address -Wall -Wextra -Werror -I$(INCLUDE)
+CFLAGS		=	-Wall -Wextra -Werror -I$(INCLUDE) ##-fsanitize=address -g
 RM			=	rm -f
 
-SRCS		=	main.c 				\
-				free.c				\
-				get_map.c			\
-				get_textures_pos.c	\
-				modgnl_utils.c		\
-				modgnl.c			\
-				parsing.c			\
-				read_file.c			\
-				raycast/raycast.c
+SRCS_DIR	=	srcs
+PARSING_DIR	=	$(SRCS_DIR)/parsing
+RAYCAST_DIR	=	$(SRCS_DIR)/raycast
+
+SRCS		=	main.c 								\
+				$(SRCS_DIR)/free.c					\
+				$(PARSING_DIR)/get_map.c			\
+				$(PARSING_DIR)/get_textures_pos.c	\
+				$(PARSING_DIR)/modgnl_utils.c		\
+				$(PARSING_DIR)/modgnl.c				\
+				$(PARSING_DIR)/parsing.c			\
+				$(PARSING_DIR)/read_file.c			\
+				$(RAYCAST_DIR)/raycast.c			\
 
 OBJS		=	$(SRCS:%.c=%.o)
 
@@ -49,10 +54,14 @@ localclean:
 clean:		localclean
 			@$(MAKE) clean -s -C $(LIBFT_DIR)
 			@echo "Clean libft."
+			@$(MAKE) clean -s -C $(MLX_DIR)
+			@echo "Clean MiniLibX."
 
 fclean:		localclean
 			@$(MAKE) fclean -s -C $(LIBFT_DIR)
 			@echo "Full clean libft."
+			@$(MAKE) clean -s -C $(MLX_DIR)
+			@echo "Full clean MiniLibX."
 			@$(RM) $(NAME)
 			@echo "Removed executable."
 

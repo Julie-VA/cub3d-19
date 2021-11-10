@@ -17,12 +17,14 @@
 # define KEY_S 1
 # define KEY_D 2
 # define KEY_W 13
+# define KEY_L 123
+# define KEY_R 124
 # define KEY_ESC 53
 
 typedef struct s_map
 {
 	char	**raw_file;
-	char	**map_f;
+	char	**map;
 	char	*n_texture;
 	char	*s_texture;
 	char	*w_texture;
@@ -32,7 +34,7 @@ typedef struct s_map
 	int		p_pos_x;
 	int		p_pos_y;
 	char	p_ori;
-}	t_map;
+}	t_file;
 
 typedef struct s_icoord
 {
@@ -76,13 +78,13 @@ char	**read_file(char *argv);
 int		check_cub(char *str);
 int		raycast(t_mlx *mlx);
 
-int		free_all(t_map *map);
+int		free_all(t_file *map);
 
-int		parsing(char *argv, t_map *map);
+int		parsing(char *argv, t_file *map);
 
-int		get_textures(t_map *map);
-int		get_pos(t_map *map);
+int		get_textures(t_file *map);
+int		get_pos(t_file *map);
 
-int		get_map(t_map *map);
+int		get_map(t_file *map);
 
 #endif

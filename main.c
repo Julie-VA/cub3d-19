@@ -1,9 +1,9 @@
 #include "cub3d.h"
 
-void	init_t_map(t_map *map)
+void	init_t_map(t_file *file)
 {
-	map->raw_file = NULL;
-	map->map_f = NULL;
+	file->raw_file = NULL;
+	file->map = NULL;
 }
 
 int	exit_game(void *arg)
@@ -28,6 +28,10 @@ int	key_press(int keycode, void* arg)
 		pPos.x -= pDir.x * 0.2;
 		pPos.y -= pDir.y * 0.2;
 	}
+	if (keycode == KEY_A)
+	{
+		;//
+	}
 	if (keycode == KEY_D)
 	{
 		pPos.x += pDir.x * cos(1.5708) ;
@@ -47,7 +51,7 @@ int	key_press(int keycode, void* arg)
 		plane.y = oldPlaneX * sin(-0.1) + plane.y * cos(-0.1);
 		*/
 	}
-	if (keycode == KEY_A)
+	if (keycode == KEY_L)
 	{
 		double	oldDirx = pDir.x;
 		double	oldPlaneX = plane.x;
@@ -75,8 +79,7 @@ void	hook_init(void *mlx, void *win, t_data *img)
 
 int	main(int argc, char **argv)
 {
-	t_map	*map;
-	int		i;
+	t_file	*file;
 
 	void	*mlx;
 	void	*mlx_win;
@@ -91,44 +94,23 @@ int	main(int argc, char **argv)
 		write(1, "Error\n", 6);
 		return (0);
 	}
-	map = (t_map *)malloc(sizeof(t_map));
-	if (!map)
+	file = (t_file *)malloc(sizeof(t_file));
+	if (!file)
 		return (1);
-	init_t_map(map);
+	init_t_map(file);
 	/*
 	if (parsing(argv[1], map))
 	{
 		system("leaks cub3d");
-		return (free_all(map));
+		return (free_all(file));
 	}
 	*/
-	i = 0;
-	// while (map->raw_file[i])
-	// {
-	// 	printf("map[%d]=%s\n", i, map->raw_file[i]);
-	// 	i++;
-	// }
-	// printf("n_texture=%s\n", map->n_texture);
-	// printf("s_texture=%s\n", map->s_texture);
-	// printf("w_texture=%s\n", map->w_texture);
-	// printf("e_texture=%s\n", map->e_texture);
-	// printf("f_color=%s\n", map->f_color);
-	// printf("c_color=%s\n", map->c_color);
-	// i = 0;
-	// while (map->map_f[i])
-	// {
-	// 	printf("map_f[%d]=%s\n", i, map->map_f[i]);
-	// 	i++;
-	// }
-	// printf("p_pos_x=%d\n", map->p_pos_x);
-	// printf("p_pos_y=%d\n", map->p_pos_y);
-	// printf("p_ori=%c\n", map->p_ori);
 	mlx = mlx_init();
 	mlx_win = mlx_new_window(mlx, 1920, 1080, "cub3D");
 	img.img = mlx_xpm_file_to_image(mlx, "pics/coll.xpm", &(img.size.x), &(img.size.y));
 	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_len, &img.endian);
 	hook_init(mlx, mlx_win, &img);
 	mlx_loop(mlx);
-	free_all(map);
+	free_all(file);
 	return (0);
 }

@@ -10,7 +10,7 @@ LIB			=	-Lmlx -lz -lmlx -framework OpenGL -framework Appkit
 
 CC			=	gcc
 INCLUDE		=	includes
-CFLAGS		=	-Wall -Wextra -Werror -I$(INCLUDE) ##-fsanitize=address -g
+CFLAGS		=	-Wall -Wextra -Werror -I$(INCLUDE) -fsanitize=address -g
 RM			=	rm -f
 
 SRCS_DIR	=	srcs

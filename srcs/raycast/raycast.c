@@ -6,7 +6,7 @@
 /*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/10 14:49:20 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/10 14:55:27 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	raycast(t_mlx *mlx)
 	int			rays_i = 0;
 	t_data		img;
 
-	img.img = mlx_new_image(mlx, 1920, 1080);
+	img.img = mlx_new_image(mlx->mlx, 1920, 1080);
 	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_len, &img.endian);
 	while (rays_i < SCREEN_W)
 	{
@@ -103,7 +103,7 @@ int	raycast(t_mlx *mlx)
 				map.y += step.y;
 				side = 1;
 			}
-			if (1/*mmap[map.x][map.y] > 0*/)
+			if (mlx->file->map[map.x][map.y] != '0')
 				hit = 1;
 		}
 		int color;

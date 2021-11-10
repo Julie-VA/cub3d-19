@@ -64,6 +64,8 @@ typedef struct s_mlx
 	void*	win;
 	void*	mlx;
 	t_data*	tex;
+	t_data*	buff;
+	t_data*	neuve;
 	t_file*	file;
 }			t_mlx;
 

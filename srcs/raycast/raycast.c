@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/10 16:40:57 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/10 17:14:45 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,10 @@ void	set_px(t_data *data, t_icoord coord, unsigned int color)
 int	raycast(t_mlx *mlx)
 {
 	int			rays_i = 0;
-	t_data		img;
 
-	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->tex->bg, 0, 0);
-	img.img = mlx_new_image(mlx->mlx, 1920, 1080);
-	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_len, &img.endian);
+	for (int i = 0; i < mlx->buff->size.x; i++)
+		for (int j = 0; j < mlx->buff->size.y; j++)
+			set_px(mlx->buff, (t_icoord) {i, j}, get_pixel(mlx->neuve, (t_icoord) {i, j}, 0));
 	while (rays_i < SCREEN_W)
 	{
 		double		cameraX = 2 * rays_i / ((double)SCREEN_W) - 1;;
@@ -87,7 +86,6 @@ int	raycast(t_mlx *mlx)
 			step.y = 1;
 			sideDist.y = (map.y + 1.0 - pPos.y) * deltaDist.y;
 		}
-
 		while(!hit)
 		{
 			if (sideDist.x < sideDist.y)
@@ -139,11 +137,11 @@ int	raycast(t_mlx *mlx)
 
 		while (drawStart <= drawEnd)
 		{
-			set_px(&img, (t_icoord){rays_i, drawStart++}, get_pixel(mlx->tex, (t_icoord) {tex_x, (int)texPos & 63}, side));
+			set_px(mlx->buff, (t_icoord){rays_i, drawStart++}, get_pixel(mlx->tex, (t_icoord) {tex_x, (int)texPos & 63}, side));
 			texPos += steptex;
 		}
 		rays_i++;
 	}
-	mlx_put_image_to_window(mlx->mlx, mlx->win, img.img, 0, 0);
+	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->buff->img, 0, 0);
 	return 0;
 }

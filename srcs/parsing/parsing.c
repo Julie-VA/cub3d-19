@@ -104,6 +104,8 @@ int	check_map(char **map)
 int	parsing(char *argv, t_file *file)
 {
 	file->raw_file = read_file(argv);
+	if (!file->raw_file)
+		return (1);
 	if (get_textures(file))
 		return (1);
 	if (get_map(file))

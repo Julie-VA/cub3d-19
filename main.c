@@ -71,10 +71,10 @@ int	key_press(int keycode, void* arg)
 	return (0);
 }
 
-void	hook_init(void *mlx, void *win, t_data *img, t_file *file)
+void	hook_init(void *mlx, void *win, t_data *img, t_file *file, t_data *buff, t_data* neuve)
 {
 	t_mlx	*mlxAll = malloc(sizeof(t_mlx));
-	*mlxAll = (t_mlx){win, mlx, img, file};
+	*mlxAll = (t_mlx){win, mlx, img, buff, neuve, file};
 
 	mlx_hook(win, 2, 1L << 0, key_press, NULL);
 	mlx_hook(win, EVENT_DEST, 0, exit_game, NULL);
@@ -89,6 +89,8 @@ int	main(int argc, char **argv)
 	void	*mlx;
 	void	*mlx_win;
 	t_data	img;
+	t_data	buff;
+	t_data	neuve;
 
 	mlx = mlx_init();
 	pDir = (t_fcoord) {-1, 0};
@@ -110,10 +112,13 @@ int	main(int argc, char **argv)
 	}
 	pPos = (t_fcoord) {file->p_pos_x, file->p_pos_y};
 	mlx_win = mlx_new_window(mlx, 1920, 1080, "cub3D");
-	img.bg = mlx_xpm_file_to_image(mlx, "pics/bg.xpm", &(img.size_bg.x), &(img.size_bg.y));
+	buff.img = mlx_xpm_file_to_image(mlx, "pics/bg.xpm", &(buff.size.x), &(buff.size.y));
+	buff.addr = mlx_get_data_addr(buff.img, &buff.bpp, &buff.line_len, &buff.endian);
+	neuve.img = mlx_xpm_file_to_image(mlx, "pics/bg.xpm", &(neuve.size.x), &(neuve.size.y));
+	neuve.addr = mlx_get_data_addr(neuve.img, &neuve.bpp, &neuve.line_len, &neuve.endian);
 	img.img = mlx_xpm_file_to_image(mlx, "pics/purplestone.xpm", &(img.size.x), &(img.size.y));
 	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_len, &img.endian);
-	hook_init(mlx, mlx_win, &img, file);
+	hook_init(mlx, mlx_win, &img, file, &buff, &neuve);
 	mlx_loop(mlx);
 	free_all(file);
 	return (0);

@@ -125,9 +125,9 @@ int	main(int argc, char **argv)
 	// printf("p_ori=%c\n", map->p_ori);
 	mlx = mlx_init();
 	mlx_win = mlx_new_window(mlx, 1920, 1080, "cub3D");
-	hook_init(mlx, mlx_win, &img);
 	img.img = mlx_xpm_file_to_image(mlx, "pics/coll.xpm", &(img.size.x), &(img.size.y));
-	//img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_len, &img.endian);
+	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_len, &img.endian);
+	hook_init(mlx, mlx_win, &img);
 	mlx_loop(mlx);
 	free_all(map);
 	return (0);

@@ -13,34 +13,6 @@ int	exit_game(void *arg)
 	return (1);
 }
 
-
-int worldmap[24][24] = {
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
-  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-};
-
 int	key_press(int keycode, void* arg)
 {
 	(void)arg;
@@ -58,6 +30,12 @@ int	key_press(int keycode, void* arg)
 	}
 	if (keycode == KEY_D)
 	{
+		pPos.x += pDir.x * cos(1.5708) ;
+		pPos.y += pDir.y * 0.2;
+
+		pPos.x += (pDir.x * cos(-1.5708) - pDir.y * sin(-1.5708)) * 0.2;
+		pPos.y += (pDir.x * sin(-1.5708) + pDir.y * cos(-1.5708)) * 0.2;
+		/*
 		double	oldDirx = pDir.x;
 
 		pDir.x = pDir.x * cos(-0.1) - pDir.y * sin(-0.1);
@@ -67,6 +45,7 @@ int	key_press(int keycode, void* arg)
 
 		plane.x = plane.x * cos(-0.1) - plane.y * sin(-0.1);
 		plane.y = oldPlaneX * sin(-0.1) + plane.y * cos(-0.1);
+		*/
 	}
 	if (keycode == KEY_A)
 	{
@@ -83,10 +62,10 @@ int	key_press(int keycode, void* arg)
 	return (0);
 }
 
-void	hook_init(void *mlx, void *win, t_data *img, t_data *black)
+void	hook_init(void *mlx, void *win, t_data *img)
 {
 	t_mlx	*mlxAll = malloc(sizeof(t_mlx));
-	*mlxAll = (t_mlx){win, mlx, img, black};
+	*mlxAll = (t_mlx){win, mlx, img};
 
 	mlx_hook(win, 2, 1L << 0, key_press, NULL);
 	mlx_hook(win, EVENT_DEST, 0, exit_game, NULL);
@@ -102,9 +81,6 @@ int	main(int argc, char **argv)
 	void	*mlx;
 	void	*mlx_win;
 	t_data	img;
-	t_data	black;
-
-	
 
 	pPos = (t_fcoord) {4, 4};
 	pDir = (t_fcoord) {-1, 0};
@@ -148,16 +124,10 @@ int	main(int argc, char **argv)
 	// printf("p_pos_y=%d\n", map->p_pos_y);
 	// printf("p_ori=%c\n", map->p_ori);
 	mlx = mlx_init();
-	mlx_win = mlx_new_window(mlx, 1920, 1080, "Hello world!");
-	img.img = mlx_new_image(mlx, 1920, 1080);
-	black.img = mlx_new_image(mlx, 1920, 1080);
-	black.addr = mlx_get_data_addr(black.img, &black.bpp, &black.line_len, &black.endian);
-	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_len, &img.endian);
-	for (int x = 0; x < SCREEN_W; x++)
-		for (int y = 0; y < SCREEN_H; y++)
-			set_px(&black, (t_icoord){x, y}, 0);
-
-	hook_init(mlx, mlx_win, &img, &black);
+	mlx_win = mlx_new_window(mlx, 1920, 1080, "cub3D");
+	hook_init(mlx, mlx_win, &img);
+	img.img = mlx_xpm_file_to_image(mlx, "pics/coll.xpm", &(img.size.x), &(img.size.y));
+	//img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_len, &img.endian);
 	mlx_loop(mlx);
 	free_all(map);
 	return (0);

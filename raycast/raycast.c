@@ -6,7 +6,7 @@
 /*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/09 15:39:33 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/10 12:23:55 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,16 @@ int	mmap[10][10] = {
 int	create_trgb(int t, int r, int g, int b)
 {
 	return (t << 24 | r << 16 | g << 8 | b);
+}
+
+unsigned int	get_pixel(t_data *data, t_icoord coord)
+{
+	char	*color;
+	int		offset;
+
+	offset = coord.y * data->line_len + coord.x * (data->bpp / 8);
+	color = data->addr + offset;
+	return (*(unsigned int *)color);
 }
 
 void	set_px(t_data *data, t_icoord coord, unsigned int color)
@@ -115,18 +125,40 @@ int	raycast(t_mlx *mlx)
 		else
 			perpWallDist = sideDist.y - deltaDist.y;
 
-		int	lineHeight = (int)(SCREEN_H / perpWallDist); 
+		double wall_x;
+
+		if (side == 0)
+			wall_x = pPos.y + perpWallDist * rayDir.y;
+		else
+			wall_x = pPos.x + perpWallDist * rayDir.x;
+		wall_x -= floor(wall_x);
+
+		int	tex_x = wall_x * 64;
+
+		if(side == 0 && rayDir.x > 0) tex_x = 64 - tex_x - 1;
+		if(side == 1 && rayDir.y < 0) tex_x = 64 - tex_x - 1;
+
+		double	lineHeight = (int)(SCREEN_H / perpWallDist); 
 		int	drawStart = -lineHeight / 2 + SCREEN_H / 2;
+
+
 		if (drawStart < 0) drawStart = 0;
+
 		int	drawEnd = lineHeight / 2 + SCREEN_H / 2;
+
 		if (drawEnd >= SCREEN_H)
 			drawEnd = SCREEN_H - 1;
-	int color = 255;
-	while (drawStart <= drawEnd)
-		set_px(&img, (t_icoord){rays_i, drawStart++}, color);
-	rays_i++;
+
+		double steptex = 1.0 * 64 / lineHeight;
+		double texPos = (drawStart - SCREEN_H / 2 + lineHeight / 2) * steptex;
+
+		while (drawStart <= drawEnd)
+		{
+			set_px(&img, (t_icoord){rays_i, drawStart++}, 255 /*get_pixel(&tex, (t_icoord) {tex_x, (int)texPos & 63})*/);
+			texPos += steptex;
+		}
+		rays_i++;
 	}
-	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->black->img, 0, 0);
 	mlx_put_image_to_window(mlx->mlx, mlx->win, img.img, 0, 0);
 	return 0;
 }

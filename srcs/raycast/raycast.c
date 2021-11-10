@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/10 15:31:54 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/10 15:46:34 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,17 @@ int	create_trgb(int t, int r, int g, int b)
 	return (t << 24 | r << 16 | g << 8 | b);
 }
 
-unsigned int	get_pixel(t_data *data, t_icoord coord)
+unsigned int	get_pixel(t_data *data, t_icoord coord, int side)
 {
 	char	*color;
 	int		offset;
 
 	offset = coord.y * data->line_len + coord.x * (data->bpp / 8);
 	color = data->addr + offset;
-	return (*(unsigned int *)color);
+	if (!side)
+		return (*(unsigned int *)color);
+	else
+		return (*(unsigned int *)color / 2);
 }
 
 void	set_px(t_data *data, t_icoord coord, unsigned int color)
@@ -147,7 +150,7 @@ int	raycast(t_mlx *mlx)
 
 		while (drawStart <= drawEnd)
 		{
-			set_px(&img, (t_icoord){rays_i, drawStart++}, get_pixel(&tex, (t_icoord) {tex_x, (int)texPos & 63}));
+			set_px(&img, (t_icoord){rays_i, drawStart++}, get_pixel(mlx->tex, (t_icoord) {tex_x, (int)texPos & 63}, side));
 			texPos += steptex;
 		}
 		rays_i++;

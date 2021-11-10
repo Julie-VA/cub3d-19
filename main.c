@@ -110,7 +110,7 @@ int	main(int argc, char **argv)
 	}
 	pPos = (t_fcoord) {file->p_pos_x, file->p_pos_y};
 	mlx_win = mlx_new_window(mlx, 1920, 1080, "cub3D");
-	img.img = mlx_xpm_file_to_image(mlx, "pics/coll.xpm", &(img.size.x), &(img.size.y));
+	img.img = mlx_xpm_file_to_image(mlx, "pics/purplestone.xpm", &(img.size.x), &(img.size.y));
 	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_len, &img.endian);
 	hook_init(mlx, mlx_win, &img, file);
 	mlx_loop(mlx);

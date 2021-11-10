@@ -9,14 +9,17 @@ INCLUDE		=	includes
 CFLAGS		=	-Wall -Wextra -Werror -I$(INCLUDE) ##-fsanitize=address -g
 RM			=	rm -f
 
-SRCS		=	main.c 				\
-				free.c				\
-				get_map.c			\
-				get_textures_pos.c	\
-				modgnl_utils.c		\
-				modgnl.c			\
-				parsing.c			\
-				read_file.c			\
+SRCS_DIR	=	srcs
+PARSING_DIR	=	$(SRCS_DIR)/parsing
+
+SRCS		=	main.c 								\
+				$(SRCS_DIR)/free.c					\
+				$(PARSING_DIR)/get_map.c			\
+				$(PARSING_DIR)/get_textures_pos.c	\
+				$(PARSING_DIR)/modgnl_utils.c		\
+				$(PARSING_DIR)/modgnl.c				\
+				$(PARSING_DIR)/parsing.c			\
+				$(PARSING_DIR)/read_file.c			\
 
 OBJS		=	$(SRCS:%.c=%.o)
 

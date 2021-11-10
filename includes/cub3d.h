@@ -8,10 +8,10 @@
 # include <fcntl.h>
 # include "libft.h"
 
-typedef struct s_map
+typedef struct s_file
 {
 	char	**raw_file;
-	char	**map_f;
+	char	**map;
 	char	*n_texture;
 	char	*s_texture;
 	char	*w_texture;
@@ -21,7 +21,7 @@ typedef struct s_map
 	int		p_pos_x;
 	int		p_pos_y;
 	char	p_ori;
-}	t_map;
+}	t_file;
 
 int		get_next_line(int fd, char **line);
 int		ft_modstrlen(const char *s, int mod);
@@ -30,13 +30,13 @@ char	*ft_modstrjoin(char const *s1, char const *s2);
 char	**read_file(char *argv);
 int		check_cub(char *str);
 
-int		free_all(t_map *map);
+int		free_all(t_file *map);
 
-int		parsing(char *argv, t_map *map);
+int		parsing(char *argv, t_file *map);
 
-int		get_textures(t_map *map);
-int		get_pos(t_map *map);
+int		get_textures(t_file *map);
+int		get_pos(t_file *map);
 
-int		get_map(t_map *map);
+int		get_map(t_file *map);
 
 #endif

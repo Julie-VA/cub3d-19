@@ -61,8 +61,8 @@ typedef struct s_mlx
 {
 	void*	win;
 	void*	mlx;
-	t_data*	img;
-	t_data*	black;
+	t_data*	tex;
+	t_file*	file;
 }			t_mlx;
 
 t_fcoord	pPos;

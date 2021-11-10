@@ -71,10 +71,10 @@ int	key_press(int keycode, void* arg)
 	return (0);
 }
 
-void	hook_init(void *mlx, void *win, t_data *img, t_data *black)
+void	hook_init(void *mlx, void *win, t_data *img, t_file *file)
 {
 	t_mlx	*mlxAll = malloc(sizeof(t_mlx));
-	*mlxAll = (t_mlx){win, mlx, img, black};
+	*mlxAll = (t_mlx){win, mlx, img, file};
 
 	mlx_hook(win, 2, 1L << 0, key_press, NULL);
 	mlx_hook(win, EVENT_DEST, 0, exit_game, NULL);
@@ -89,11 +89,8 @@ int	main(int argc, char **argv)
 	void	*mlx;
 	void	*mlx_win;
 	t_data	img;
-	t_data	black;
 
-	
-
-	pPos = (t_fcoord) {4, 4};
+	mlx = mlx_init();
 	pDir = (t_fcoord) {-1, 0};
 	plane = (t_fcoord) {0, 0.66};
 
@@ -106,24 +103,16 @@ int	main(int argc, char **argv)
 	if (!file)
 		return (1);
 	init_t_map(file);
-	/*
-	if (parsing(argv[1], map))
+	if (parsing(argv[1], file))
 	{
 		system("leaks cub3d");
 		return (free_all(file));
 	}
-	*/
-	mlx = mlx_init();
-	mlx_win = mlx_new_window(mlx, 1920, 1080, "Hello world!");
-	img.img = mlx_new_image(mlx, 1920, 1080);
-	black.img = mlx_new_image(mlx, 1920, 1080);
-	black.addr = mlx_get_data_addr(black.img, &black.bpp, &black.line_len, &black.endian);
+	pPos = (t_fcoord) {file->p_pos_x, file->p_pos_y};
+	mlx_win = mlx_new_window(mlx, 1920, 1080, "cub3D");
+	img.img = mlx_xpm_file_to_image(mlx, "pics/coll.xpm", &(img.size.x), &(img.size.y));
 	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_len, &img.endian);
-	for (int x = 0; x < SCREEN_W; x++)
-		for (int y = 0; y < SCREEN_H; y++)
-			set_px(&black, (t_icoord){x, y}, 0);
-
-	hook_init(mlx, mlx_win, &img, &black);
+	hook_init(mlx, mlx_win, &img, file);
 	mlx_loop(mlx);
 	free_all(file);
 	return (0);

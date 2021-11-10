@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/10 17:14:45 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/10 17:57:06 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ int	raycast(t_mlx *mlx)
 		t_fcoord	sideDist;
 		t_fcoord	deltaDist;
 
-		rayDir.x = pDir.x + plane.x * cameraX;
-		rayDir.y = pDir.y + plane.y * cameraX;
+		rayDir.x = mlx->player.dir.x + mlx->player.plane.x * cameraX;
+		rayDir.y = mlx->player.dir.y + mlx->player.plane.y * cameraX;
 
 		deltaDist.x = (rayDir.x == 0) ? 1e30 : fabs(1 / rayDir.x); 
 		deltaDist.y = (rayDir.y == 0) ? 1e30 : fabs(1 / rayDir.y); 
@@ -63,28 +63,28 @@ int	raycast(t_mlx *mlx)
 		int			hit = 0;
 		int			side;
 
-		map.x = (int)pPos.x; 
-		map.y = (int)pPos.y;
+		map.x = (int)mlx->player.pos.x; 
+		map.y = (int)mlx->player.pos.y; 
 
 		if (rayDir.x < 0)
 		{
 			step.x = -1;
-			sideDist.x = (pPos.x - map.x) * deltaDist.x;
+			sideDist.x = (mlx->player.pos.x - map.x) * deltaDist.x;
 		}
 		else
 		{
 			step.x = 1;
-			sideDist.x = (map.x + 1.0 - pPos.x) * deltaDist.x;
+			sideDist.x = (map.x + 1.0 - mlx->player.pos.x) * deltaDist.x;
 		}
 		if (rayDir.y < 0)
 		{
 			step.y = -1;
-			sideDist.y = (pPos.y - map.y) * deltaDist.y;
+			sideDist.y = (mlx->player.pos.y - map.y) * deltaDist.y;
 		}
 		else
 		{
 			step.y = 1;
-			sideDist.y = (map.y + 1.0 - pPos.y) * deltaDist.y;
+			sideDist.y = (map.y + 1.0 - mlx->player.pos.y) * deltaDist.y;
 		}
 		while(!hit)
 		{
@@ -111,9 +111,9 @@ int	raycast(t_mlx *mlx)
 		double wall_x;
 
 		if (side == 0)
-			wall_x = pPos.y + perpWallDist * rayDir.y;
+			wall_x = mlx->player.pos.y + perpWallDist * rayDir.y;
 		else
-			wall_x = pPos.x + perpWallDist * rayDir.x;
+			wall_x = mlx->player.pos.x + perpWallDist * rayDir.x;
 		wall_x -= floor(wall_x);
 
 		int	tex_x = wall_x * 64;

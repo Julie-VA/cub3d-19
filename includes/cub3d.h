@@ -57,17 +57,29 @@ typedef struct s_data {
 	int			endian;
 }				t_data;
 
+typedef struct s_player
+{
+	t_fcoord	pos;
+	t_fcoord	dir;
+	t_fcoord	plane;
+}				t_player;
+
+typedef struct s_game
+{
+	t_player	player;
+	char**		map;
+}		t_game;
+
+
 typedef struct s_mlx
 {
 	void*	win;
 	void*	mlx;
-	t_data*	tex;
-	t_file*	file;
+	t_data	*tex;
+	t_data	*buff;
+	t_file	*file;
+	t_player	player;
 }			t_mlx;
-
-t_fcoord	pPos;
-t_fcoord	pDir;
-t_fcoord	plane;
 
 void	set_px(t_data *data, t_icoord coord, unsigned int color);
 
@@ -88,4 +100,5 @@ int		get_pos(t_file *map);
 
 int		get_map(t_file *map);
 
+int	key_press(int keycode, t_game *game);
 #endif

@@ -6,7 +6,7 @@
 /*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/10 14:55:27 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/10 16:44:28 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,9 @@ void	set_px(t_data *data, t_icoord coord, unsigned int color)
 int	raycast(t_mlx *mlx)
 {
 	int			rays_i = 0;
-	t_data		img;
 
-	img.img = mlx_new_image(mlx->mlx, 1920, 1080);
-	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_len, &img.endian);
+	printf("%f\n", mlx->player.pos.y);
+	printf("%f\n", mlx->player.pos.x);
 	while (rays_i < SCREEN_W)
 	{
 		double		cameraX = 2 * rays_i / ((double)SCREEN_W) - 1;;
@@ -53,8 +52,8 @@ int	raycast(t_mlx *mlx)
 		t_fcoord	sideDist;
 		t_fcoord	deltaDist;
 
-		rayDir.x = pDir.x + plane.x * cameraX;
-		rayDir.y = pDir.y + plane.y * cameraX;
+		rayDir.x = mlx->player.dir.x + mlx->player.plane.x * cameraX;
+		rayDir.y = mlx->player.dir.y + mlx->player.plane.y * cameraX;
 
 		deltaDist.x = (rayDir.x == 0) ? 1e30 : fabs(1 / rayDir.x); 
 		deltaDist.y = (rayDir.y == 0) ? 1e30 : fabs(1 / rayDir.y); 
@@ -65,30 +64,31 @@ int	raycast(t_mlx *mlx)
 		int			hit = 0;
 		int			side;
 
-		map.x = (int)pPos.x; 
-		map.y = (int)pPos.y;
+		map.x = (int)mlx->player.pos.x; 
+		map.y = (int)mlx->player.pos.y; 
 
 		if (rayDir.x < 0)
 		{
 			step.x = -1;
-			sideDist.x = (pPos.x - map.x) * deltaDist.x;
+			sideDist.x = (mlx->player.pos.x - map.x) * deltaDist.x;
 		}
 		else
 		{
 			step.x = 1;
-			sideDist.x = (map.x + 1.0 - pPos.x) * deltaDist.x;
+			sideDist.x = (map.x + 1.0 - mlx->player.pos.x) * deltaDist.x;
 		}
 		if (rayDir.y < 0)
 		{
 			step.y = -1;
-			sideDist.y = (pPos.y - map.y) * deltaDist.y;
+			sideDist.y = (mlx->player.pos.y - map.y) * deltaDist.y;
 		}
 		else
 		{
 			step.y = 1;
-			sideDist.y = (map.y + 1.0 - pPos.y) * deltaDist.y;
+			sideDist.y = (map.y + 1.0 - mlx->player.pos.y) * deltaDist.y;
 		}
 
+		printf("cc\n");
 		while(!hit)
 		{
 			if (sideDist.x < sideDist.y)
@@ -103,7 +103,8 @@ int	raycast(t_mlx *mlx)
 				map.y += step.y;
 				side = 1;
 			}
-			if (mlx->file->map[map.x][map.y] != '0')
+			printf("%d %d\n", map.x, map.y);
+			if (mlx->file->map[map.y][map.x] == '1')
 				hit = 1;
 		}
 		int color;
@@ -121,9 +122,9 @@ int	raycast(t_mlx *mlx)
 		double wall_x;
 
 		if (side == 0)
-			wall_x = pPos.y + perpWallDist * rayDir.y;
+			wall_x = mlx->player.pos.y + perpWallDist * rayDir.y;
 		else
-			wall_x = pPos.x + perpWallDist * rayDir.x;
+			wall_x = mlx->player.pos.x + perpWallDist * rayDir.x;
 		wall_x -= floor(wall_x);
 
 		int	tex_x = wall_x * 64;
@@ -147,11 +148,11 @@ int	raycast(t_mlx *mlx)
 
 		while (drawStart <= drawEnd)
 		{
-			set_px(&img, (t_icoord){rays_i, drawStart++}, 255 /*get_pixel(&tex, (t_icoord) {tex_x, (int)texPos & 63})*/);
+			set_px(mlx->buff, (t_icoord){rays_i, drawStart++}, get_pixel(mlx->tex, (t_icoord) {tex_x, (int)texPos & 63}));
 			texPos += steptex;
 		}
 		rays_i++;
 	}
-	mlx_put_image_to_window(mlx->mlx, mlx->win, img.img, 0, 0);
+	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->buff->img, 0, 0);
 	return 0;
 }

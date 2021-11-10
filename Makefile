@@ -26,6 +26,7 @@ SRCS		=	main.c 								\
 				$(PARSING_DIR)/parsing.c			\
 				$(PARSING_DIR)/read_file.c			\
 				$(RAYCAST_DIR)/raycast.c			\
+				$(SRCS_DIR)/key.c
 
 OBJS		=	$(SRCS:%.c=%.o)
 

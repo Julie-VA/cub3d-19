@@ -50,9 +50,11 @@ typedef struct s_fcoord
 
 typedef struct s_data {
 	void		*img;
+	void		*bg;
 	char		*addr;
 	int			bpp;
 	t_icoord	size;
+	t_icoord	size_bg;
 	int			line_len;
 	int			endian;
 }				t_data;

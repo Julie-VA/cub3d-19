@@ -6,16 +6,11 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/10 15:46:34 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/10 16:40:57 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-int	create_trgb(int t, int r, int g, int b)
-{
-	return (t << 24 | r << 16 | g << 8 | b);
-}
 
 unsigned int	get_pixel(t_data *data, t_icoord coord, int side)
 {
@@ -47,6 +42,7 @@ int	raycast(t_mlx *mlx)
 	int			rays_i = 0;
 	t_data		img;
 
+	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->tex->bg, 0, 0);
 	img.img = mlx_new_image(mlx->mlx, 1920, 1080);
 	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_len, &img.endian);
 	while (rays_i < SCREEN_W)
@@ -109,17 +105,10 @@ int	raycast(t_mlx *mlx)
 			if (mlx->file->map[map.y][map.x] == '1')
 				hit = 1;
 		}
-		int color;
 		if (side == 0)
-		{
-			color = 225;
 			perpWallDist = sideDist.x - deltaDist.x;
-		}
 		else
-		{
-			color = 225/2;
 			perpWallDist = sideDist.y - deltaDist.y;
-		}
 
 		double wall_x;
 

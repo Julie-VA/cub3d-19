@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 11:50:08 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/12 14:48:01 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/12 15:34:46 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,13 @@ static int	count_lines(char *argv, char **line)
 	return (i);
 }
 
+static char	**bad_file(void *arg)
+{
+	(void)arg;
+	write(2, "Error opening the map\n", 22);
+	return (NULL);
+}
+
 char	**read_file(char *argv)
 {
 	char	*line;
@@ -57,11 +64,10 @@ char	**read_file(char *argv)
 
 	i = count_lines(argv, &line);
 	if (i == -1)
-		return (NULL);
+		return (bad_file(NULL));
 	raw_file = (char **)malloc(sizeof(char *) * (i + 1));
 	if (!raw_file)
 		return (NULL);
-	ret = 0;
 	ret = 1;
 	i = 0;
 	fd = open(argv, O_RDONLY);
@@ -69,10 +75,7 @@ char	**read_file(char *argv)
 	{
 		ret = get_next_line(fd, &raw_file[i++]);
 		if (ret == -1)
-		{
-			write(2, "Error opening the map\n", 22);
-			return (NULL);
-		}
+			return (bad_file(NULL));
 	}
 	raw_file[i] = NULL;
 	close(fd);

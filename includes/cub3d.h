@@ -81,8 +81,11 @@ typedef struct s_mlx
 	t_data		*buff;
 	t_data		*neuve;
 	t_file		*file;
-	t_game		*game;
 }				t_mlx;
+
+t_fcoord ppos;
+t_fcoord pdir;
+t_fcoord pplane;
 
 void	set_px(t_data *data, t_icoord coord, unsigned int color);
 
@@ -106,5 +109,5 @@ int		get_pos(t_file *map);
 
 int		get_map(t_file *map);
 
-int		key_press(int keycode, t_game *game);
+int		key_pressnew(int keycode, t_game *game);
 #endif

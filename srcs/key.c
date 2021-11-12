@@ -6,13 +6,13 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 16:03:30 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/12 12:13:58 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/12 13:58:28 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	key_press(int keycode, t_game* game)
+int	key_pressnew(int keycode, t_game* game)
 {
 	char**	map = game->map;
 	if (keycode == KEY_ESC)

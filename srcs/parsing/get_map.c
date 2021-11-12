@@ -91,21 +91,9 @@ int	get_map(t_file *file)
 		}
 		i++;
 	}
-	// printf("i - save + 1=%d\n", i - save + 1);
 	file->map = (char **)malloc(sizeof(char *) * (i - save + 2));
 	if (!file->map)
 		return (1);
-	//j = 0;
-//	while (save <= i)
-//		file->map[j++] = file->raw_file[save++];
-//	file->map[j] = NULL;
 	rem_trailing_spaces(file->map, file->raw_file + save, i - save);
-	// printf("\n");
-	// i = 0;
-	// while (file->map[i])
-	// {
-	// 	printf("map[%d]=|%s|\n", i, file->map[i]);
-	// 	i++;
-	// }
 	return (0);
 }

@@ -37,11 +37,66 @@ int	check_around(char **map, int x, int y, int height)
 	return (1);
 }
 
+int	check_top_bot(char **map, int x, int y, int height)
+{
+	int	start;
+
+	start = 0;
+	while (map[y][x] && x < (int)ft_strlen(map[y]))
+	{	
+		while (start == 0 && map[y][x] == ' ')
+			x++;
+		start = 1;
+		if (map[y][x] != '1' && map[y][x] != ' ')
+			return (1);
+		if (map[y][x] == ' ')
+			if (check_around(map, x, y, height))
+				return (1);
+		x++;
+	}
+	return (0);
+}
+
+int	check_middle(char **map, int x, int y, int height)
+{
+	int	start;
+	int	player;
+
+	start = 0;
+	player = 0;
+	while (map[y][x] && x < (int)ft_strlen(map[y]))
+	{
+		while (start == 0 && map[y][x] == ' ')
+			x++;
+		if (start == 0 && map[y][x] != '1')
+			return (1);
+		start = 1;
+		if (x == (int)ft_strlen(map[y]) - 1 && map[y][x] != '1')
+			return (1);
+		if (map[y][x] != '0' && map[y][x] != '1' && map[y][x] != ' '
+			&& map[y][x] != 'N' && map[y][x] != 'S'
+			&& map[y][x] != 'W' && map[y][x] != 'E')
+			return (1);
+		if (map[y][x] == 'N' || map[y][x] == 'S'
+			|| map[y][x] == 'W' || map[y][x] == 'E')
+		{
+			if (player || y == 0 || y == height || x == 0 || x == (int)ft_strlen(map[y]))
+				return (1);
+			else
+				player = 1;
+		}
+		if (map[y][x] == ' ')
+			if (check_around(map, x, y, height))
+				return (1);
+		x++;
+	}
+	return (0);
+}
+
 int	check_map(char **map)
 {
 	int	x;
 	int	y;
-	int	start;
 	int	player;
 	int	height;
 
@@ -50,51 +105,16 @@ int	check_map(char **map)
 	height = get_map_height(map) - 1;
 	while (map[y])
 	{
-		start = 0;
 		x = 0;
 		if (y == 0 || y == height)
 		{
-			while (map[y][x] && x < (int)ft_strlen(map[y]))
-			{	
-				while (start == 0 && map[y][x] == ' ')
-					x++;
-				start = 1;
-				if (map[y][x] != '1' && map[y][x] != ' ')
-					return (1);
-				if (map[y][x] == ' ')
-					if (check_around(map, x, y, height))
-						return (1);
-				x++;
-			}
+			if (check_top_bot(map, x, y, height))
+				return (1);
 		}
 		else
 		{
-			while (map[y][x] && x < (int)ft_strlen(map[y]))
-			{
-				while (start == 0 && map[y][x] == ' ')
-					x++;
-				if (start == 0 && map[y][x] != '1')
-					return (1);
-				start = 1;
-				if (x == (int)ft_strlen(map[y]) - 1 && map[y][x] != '1')
-					return (1);
-				if (map[y][x] != '0' && map[y][x] != '1' && map[y][x] != ' '
-					&& map[y][x] != 'N' && map[y][x] != 'S'
-					&& map[y][x] != 'W' && map[y][x] != 'E')
-					return (1);
-				if (map[y][x] == 'N' || map[y][x] == 'S'
-					|| map[y][x] == 'W' || map[y][x] == 'E')
-				{
-					if (player || y == 0 || y == height || x == 0 || x == (int)ft_strlen(map[y]))
-						return (1);
-					else
-						player = 1;
-				}
-				if (map[y][x] == ' ')
-					if (check_around(map, x, y, height))
-						return (1);
-				x++;
-			}
+			if (check_middle(map, x, y, height))
+				return (1);
 		}
 		y++;
 	}

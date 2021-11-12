@@ -128,9 +128,29 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	mlx = mlx_init();
-	ppos = (t_fcoord) {file->p_pos_x, file->p_pos_y};
-	pdir = (t_fcoord) {-1, 0};
-	pplane = (t_fcoord) {0, 0.66};
+	ppos = (t_fcoord) {file->p_pos_x + 0.5, file->p_pos_y + 0.5};
+	//directions start
+	if (file->p_ori == 'N')
+	{
+		pdir = (t_fcoord) {0, -1};
+		pplane = (t_fcoord) {-0.66, 0};
+	}
+	else if (file->p_ori == 'S')
+	{
+		pdir = (t_fcoord) {0, 1};
+		pplane = (t_fcoord) {0.66, 0};
+	}
+	else if (file->p_ori == 'W')
+	{
+		pdir = (t_fcoord) {1, 0};
+		pplane = (t_fcoord) {0, -0.66};
+	}
+	else if (file->p_ori == 'E')
+	{
+		pdir = (t_fcoord) {-1, 0};
+		pplane = (t_fcoord) {0, 0.66};
+	}
+	//directions end
 	mlx_win = mlx_new_window(mlx, 1920, 1080, "cub3D");
 	buff.img = mlx_xpm_file_to_image(mlx, "pics/bg.xpm", &(buff.size.x), &(buff.size.y));
 	buff.addr = mlx_get_data_addr(buff.img, &buff.bpp, &buff.line_len, &buff.endian);

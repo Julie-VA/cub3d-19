@@ -97,7 +97,8 @@ char	**read_file(char *argv);
 int		check_cub(char *str);
 int		raycast(t_mlx *mlx);
 
-int		free_all(t_file *map);
+int		free_file(t_file *file);
+int		free_all(t_file *file);
 
 int		parsing(char *argv, t_file *map);
 

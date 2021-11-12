@@ -108,19 +108,24 @@ int	main(int argc, char **argv)
 	t_data	buff;
 	t_data	neuve;
 
-	if (argc != 2 || !check_cub(argv[1]))
+	if (argc != 2)
 	{
-		write(1, "Error\n", 6);
-		return (0);
+		if (argc < 2)
+			write(2, "Missing map\n", 11);
+		else if (argc > 2)
+			write(2, "Too many arguments\n", 19);
+		return (1);
 	}
+	if (!check_cub(argv[1]))
+		return (1);
 	file = (t_file *)malloc(sizeof(t_file));
 	if (!file)
 		return (1);
 	init_t_file(file);
 	if (parsing(argv[1], file))
 	{
-		system("leaks cub3d");
-		return (free_all(file));
+		system("leaks cub3D");
+		return (1);
 	}
 	mlx = mlx_init();
 	ppos = (t_fcoord) {file->p_pos_x, file->p_pos_y};

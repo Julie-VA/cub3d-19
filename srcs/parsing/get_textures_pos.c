@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 11:50:28 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/12 11:52:28 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/12 14:56:43 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	get_textures(t_file *file)
 	if (!file->n_texture || !file->s_texture || !file->w_texture
 		|| !file->e_texture || !file->f_color || !file->c_color)
 	{
-		write(1, "Missing or invalid texture path(s)\n", 35);
+		write(2, "Missing or invalid texture path(s)\n", 35);
 		return (1);
 	}
 	return (0);

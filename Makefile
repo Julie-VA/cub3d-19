@@ -10,7 +10,7 @@ LIB			=	-Lmlx -lz -lmlx -framework OpenGL -framework Appkit
 
 CC			=	gcc
 INCLUDE		=	includes
-CFLAGS		=	-Wall -Wextra -Werror -I$(INCLUDE) -fsanitize=address -g
+CFLAGS		=	-Wall -Wextra -Werror -I$(INCLUDE) ##-fsanitize=address -g
 RM			=	rm -f
 
 SRCS_DIR	=	srcs
@@ -38,12 +38,12 @@ $(NAME):	$(MLX) $(LIBFT) $(OBJS)
 			@echo "\nLinked into executable \033[0;32mcub3d\033[0m."
 
 $(LIBFT):
-			@echo "Compiling libft.a"
+			@echo "Compiling Libft"
 			@$(MAKE) bonus -s -C $(LIBFT_DIR)
 
 $(MLX):
-			@echo "\n\033[0;32mCompiling MiniLibX...\033[0;33m"
-			@$(MAKE) -C mlx
+			@echo "Compiling MiniLibX"
+			@$(MAKE) -s -C mlx
 
 .c.o:
 			@printf "\033[0;33mGenerating $(NAME) objects... %-33.33s\r" $@

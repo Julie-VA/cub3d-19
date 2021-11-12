@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 11:48:36 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/12 11:49:11 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/12 15:11:29 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,15 +115,15 @@ int	parsing(char *argv, t_file *file)
 	if (!file->raw_file)
 		return (1);
 	if (get_textures(file))
-		return (1);
+		return (free_file(file));
 	if (get_map(file))
 		return (1);
 	if (check_map(file->map))
 	{
-		write(1, "wrong file\n", 10);
-		return (1);
+		write(2, "Invalid map\n", 12);
+		return (free_all(file));
 	}
 	if (get_pos(file))
-		return (1);
+		return (free_all(file));
 	return (0);
 }

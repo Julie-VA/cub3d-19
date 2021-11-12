@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 11:50:08 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/12 11:50:08 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/12 14:48:01 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	check_cub(char *str)
 			if (str[i--] == 'c')
 				if (str[i] == '.')
 					return (1);
+	write(2, "Wrong map extension\n", 20);
 	return (0);
 }
 
@@ -65,7 +66,14 @@ char	**read_file(char *argv)
 	i = 0;
 	fd = open(argv, O_RDONLY);
 	while (ret > 0)
+	{
 		ret = get_next_line(fd, &raw_file[i++]);
+		if (ret == -1)
+		{
+			write(2, "Error opening the map\n", 22);
+			return (NULL);
+		}
+	}
 	raw_file[i] = NULL;
 	close(fd);
 	return (raw_file);

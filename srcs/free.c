@@ -1,5 +1,17 @@
 #include "cub3d.h"
 
+int	free_file(t_file *file)
+{
+	int	i;
+
+	i = 0;
+	while (file->raw_file[i])
+		free(file->raw_file[i++]);
+	free(file->raw_file);
+	free(file);
+	return (1);
+}
+
 int	free_all(t_file *file)
 {
 	int	i;

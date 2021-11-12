@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_textures_pos.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/12 11:50:28 by rvan-aud          #+#    #+#             */
+/*   Updated: 2021/11/12 11:52:28 by rvan-aud         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 static char	*get_each_texture(t_file *file, char *prefix, int offset)
@@ -30,15 +42,16 @@ int	get_textures(t_file *file)
 	file->e_texture = get_each_texture(file, "EA", 2);
 	file->f_color = get_each_texture(file, "F", 1);
 	file->c_color = get_each_texture(file, "C", 1);
-	if (!file->n_texture || !file->s_texture || !file->w_texture || !file->e_texture || !file->f_color || !file->c_color)
+	if (!file->n_texture || !file->s_texture || !file->w_texture
+		|| !file->e_texture || !file->f_color || !file->c_color)
 	{
-		write(1, "Missing one or more valid texture path(s)\n", 42);
+		write(1, "Missing or invalid texture path(s)\n", 35);
 		return (1);
 	}
 	return (0);
 }
 
-static int		check_pos(t_file *file, int x, int y, char ori)
+static int	check_pos(t_file *file, int x, int y, char ori)
 {
 	if (file->map[y][x] == ori)
 	{

@@ -24,6 +24,7 @@ SRCS		=	main.c 								\
 				$(PARSING_DIR)/modgnl_utils.c		\
 				$(PARSING_DIR)/modgnl.c				\
 				$(PARSING_DIR)/parsing.c			\
+				$(PARSING_DIR)/parsing_utils.c		\
 				$(PARSING_DIR)/read_file.c			\
 				$(RAYCAST_DIR)/raycast.c			\
 				$(SRCS_DIR)/key.c
@@ -61,7 +62,7 @@ clean:		localclean
 fclean:		localclean
 			@$(MAKE) fclean -s -C $(LIBFT_DIR)
 			@echo "Full clean libft."
-			@$(MAKE) clean -s -C $(MLX_DIR)
+			@$(MAKE) fclean -s -C $(MLX_DIR)
 			@echo "Full clean MiniLibX."
 			@$(RM) $(NAME)
 			@echo "Removed executable."

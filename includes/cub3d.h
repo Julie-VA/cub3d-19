@@ -98,6 +98,9 @@ int		free_all(t_file *map);
 
 int		parsing(char *argv, t_file *map);
 
+int		get_map_height(char **map);
+int		check_around(char **map, int x, int y, int height);
+
 int		get_textures(t_file *map);
 int		get_pos(t_file *map);
 

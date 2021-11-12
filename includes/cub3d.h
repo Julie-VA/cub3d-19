@@ -21,7 +21,7 @@
 # define KEY_R 124
 # define KEY_ESC 53
 
-typedef struct s_map
+typedef struct s_file
 {
 	char	**raw_file;
 	char	**map;
@@ -75,14 +75,14 @@ typedef struct s_game
 
 typedef struct s_mlx
 {
-	void*	win;
-	void*	mlx;
-	t_data	*tex;
-	t_data	*buff;
-	t_data*	neuve;
-	t_file	*file;
-	t_player	player;
-}			t_mlx;
+	void*		win;
+	void*		mlx;
+	t_data		*tex;
+	t_data		*buff;
+	t_data		*neuve;
+	t_file		*file;
+	t_game		*game;
+}				t_mlx;
 
 void	set_px(t_data *data, t_icoord coord, unsigned int color);
 

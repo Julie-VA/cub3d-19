@@ -113,5 +113,10 @@ int		get_pos(t_file *map);
 
 int		get_map(t_file *map);
 
+int		check_only_spaces(char *line);
+int		check_after_space(char *line);
+int		check_if_player_on_border(t_file *file, int *i);
+int		check_last_line(char **raw_file);
+
 int		key_pressnew(int keycode, t_game *game);
 #endif

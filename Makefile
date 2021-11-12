@@ -20,6 +20,7 @@ RAYCAST_DIR	=	$(SRCS_DIR)/raycast
 SRCS		=	main.c 								\
 				$(SRCS_DIR)/free.c					\
 				$(PARSING_DIR)/get_map.c			\
+				$(PARSING_DIR)/get_map_checks.c		\
 				$(PARSING_DIR)/get_textures_pos.c	\
 				$(PARSING_DIR)/modgnl_utils.c		\
 				$(PARSING_DIR)/modgnl.c				\

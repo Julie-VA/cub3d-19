@@ -77,7 +77,10 @@ typedef struct s_mlx
 {
 	void*		win;
 	void*		mlx;
-	t_data		*tex;
+	t_data		*purple;
+	t_data		*blue;
+	t_data		*grey;
+	t_data		*brick;
 	t_data		*buff;
 	t_data		*neuve;
 	t_file		*file;

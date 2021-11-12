@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 11:51:32 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/12 12:01:42 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/12 16:33:21 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ int	rem_trailing_spaces(char **map, char **raw_file, int end)
 		map[i] = (char *)malloc(sizeof(char) * (len + 2));
 		if (!map[i])
 			return (1);
+		write(1, "ok\n", 3);
 		j = -1;
 		while (++j <= len)
 			map[i][j] = raw_file[i][j];

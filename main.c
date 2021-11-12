@@ -89,10 +89,10 @@ int     key_press(int keycode, char **map)
 	return (0);
 }
 
-void	hook_init(void *mlx, void *win, t_data *img, t_file *file, t_data *buff, t_data* neuve)
+void	hook_init(void *mlx, void *win, t_data *purple, t_data *blue, t_data *grey, t_data *brick, t_file *file, t_data *buff, t_data* neuve)
 {
 	t_mlx	*mlxAll = malloc(sizeof(t_mlx));
-	*mlxAll = (t_mlx){win, mlx, img, buff, neuve, file};
+	*mlxAll = (t_mlx){win, mlx, purple, blue, grey, brick, buff, neuve, file};
 
 	mlx_hook(win, 2, 1L << 0, key_press, file->map);
 	mlx_hook(win, EVENT_DEST, 0, exit_game, NULL);
@@ -104,7 +104,10 @@ int	main(int argc, char **argv)
 	t_file	*file;
 	void	*mlx;
 	void	*mlx_win;
-	t_data	img;
+	t_data	purple;
+	t_data	blue;
+	t_data	grey;
+	t_data	brick;
 	t_data	buff;
 	t_data	neuve;
 
@@ -156,9 +159,15 @@ int	main(int argc, char **argv)
 	buff.addr = mlx_get_data_addr(buff.img, &buff.bpp, &buff.line_len, &buff.endian);
 	neuve.img = mlx_xpm_file_to_image(mlx, "pics/bg.xpm", &(neuve.size.x), &(neuve.size.y));
 	neuve.addr = mlx_get_data_addr(neuve.img, &neuve.bpp, &neuve.line_len, &neuve.endian);
-	img.img = mlx_xpm_file_to_image(mlx, "pics/purplestone.xpm", &(img.size.x), &(img.size.y));
-	img.addr = mlx_get_data_addr(img.img, &img.bpp, &img.line_len, &img.endian);
-	hook_init(mlx, mlx_win, &img, file, &buff, &neuve);
+	purple.img = mlx_xpm_file_to_image(mlx, "pics/purplestone.xpm", &(purple.size.x), &(purple.size.y));
+	purple.addr = mlx_get_data_addr(purple.img, &purple.bpp, &purple.line_len, &purple.endian);
+	blue.img = mlx_xpm_file_to_image(mlx, "pics/bluestone.xpm", &(blue.size.x), &(blue.size.y));
+	blue.addr = mlx_get_data_addr(blue.img, &blue.bpp, &blue.line_len, &blue.endian);
+	grey.img = mlx_xpm_file_to_image(mlx, "pics/greystone.xpm", &(grey.size.x), &(grey.size.y));
+	grey.addr = mlx_get_data_addr(grey.img, &grey.bpp, &grey.line_len, &grey.endian);
+	brick.img = mlx_xpm_file_to_image(mlx, "pics/redbrick.xpm", &(brick.size.x), &(brick.size.y));
+	brick.addr = mlx_get_data_addr(brick.img, &brick.bpp, &brick.line_len, &brick.endian);
+	hook_init(mlx, mlx_win, &purple, &blue, &grey, &brick, file, &buff, &neuve);
 	mlx_loop(mlx);
 	free_all(file);
 	return (0);

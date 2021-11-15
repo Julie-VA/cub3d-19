@@ -23,17 +23,19 @@
 
 typedef struct s_file
 {
-	char	**raw_file;
-	char	**map;
-	char	*n_texture;
-	char	*s_texture;
-	char	*w_texture;
-	char	*e_texture;
-	char	*f_color;
-	char	*c_color;
-	int		p_pos_x;
-	int		p_pos_y;
-	char	p_ori;
+	char			**raw_file;
+	char			**map;
+	char			*n_texture;
+	char			*s_texture;
+	char			*w_texture;
+	char			*e_texture;
+	char			*f_str;
+	char			*c_str;
+	unsigned int	f_color;
+	unsigned int	c_color;
+	int				p_pos_x;
+	int				p_pos_y;
+	char			p_ori;
 }	t_file;
 
 typedef struct s_icoord
@@ -111,7 +113,7 @@ int		check_around(char **map, int x, int y, int height);
 int		get_textures(t_file *map);
 int		get_pos(t_file *map);
 
-int		get_map(t_file *map);
+int		get_map(t_file *map, int i);
 
 int		check_only_spaces(char *line);
 int		check_after_space(char *line);

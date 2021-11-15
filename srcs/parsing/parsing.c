@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 11:48:36 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/12 18:37:34 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/15 15:52:38 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,12 +111,15 @@ static int	check_map(char **map)
 
 int	parsing(char *argv, t_file *file)
 {
+	int	i;
+
+	i = 0;
 	file->raw_file = read_file(argv);
 	if (!file->raw_file)
 		return (1);
 	if (get_textures(file))
 		return (free_file(file));
-	if (get_map(file))
+	if (get_map(file, i))
 		return (1);
 	if (check_map(file->map))
 	{

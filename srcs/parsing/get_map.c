@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 11:51:32 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/12 18:56:47 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/15 15:52:45 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,11 @@ static int	rem_trailing_spaces(char **map, char **raw_file, int end)
 	return (0);
 }
 
-int	get_map(t_file *file)
+int	get_map(t_file *file, int i)
 {
-	int	i;
 	int	save;
 	int	o;
 
-	i = 0;
 	while (file->raw_file[i] && (file->raw_file[i][0] != '1'
 		&& file->raw_file[i][0] != '0' && check_after_space(file->raw_file[i])))
 	{

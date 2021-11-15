@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 18:57:00 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/12 18:58:51 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/15 15:52:02 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int	check_after_space(char *line)
 	}
 	return (1);
 }
-
 
 int	check_if_player_on_border(t_file *file, int *i)
 {

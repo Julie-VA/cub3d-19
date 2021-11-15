@@ -6,26 +6,11 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/15 15:05:09 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/15 15:47:28 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-unsigned int	get_bg_color(char *color)
-{
-	char	**rgb;
-	int		r;
-	int		g;
-	int		b;
-
-	rgb = ft_split(color, ',');
-	r = ft_atoi(rgb[0]);
-	g = ft_atoi(rgb[1]);
-	b = ft_atoi(rgb[2]);
-	printf("rgb=%d\n", (unsigned int)(65536 * r + 256 * g + b));
-	return (0);
-}
 
 unsigned int	get_pixel(t_data *data, t_icoord coord, int side)
 {
@@ -61,7 +46,10 @@ int	raycast(t_mlx *mlx)
 	for (int i = 0; i < mlx->buff->size.x; i++)
 		for (int j = 0; j < mlx->buff->size.y; j++)
 		{
-			set_px(mlx->buff, (t_icoord) {i, j}, get_bg_color(mlx->file->f_color));	
+			if (j < SCREEN_H / 2)
+				set_px(mlx->buff, (t_icoord) {i, j}, mlx->file->c_color);
+			else
+				set_px(mlx->buff, (t_icoord) {i, j}, mlx->file->f_color);
 		}
 	while (rays_i < SCREEN_W)
 	{

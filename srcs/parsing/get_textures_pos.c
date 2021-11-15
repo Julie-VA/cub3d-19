@@ -6,11 +6,25 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 11:50:28 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/12 14:56:43 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/15 15:51:39 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+static unsigned int	get_bg_color(char *color)
+{
+	char	**rgb;
+	int		r;
+	int		g;
+	int		b;
+
+	rgb = ft_split(color, ',');
+	r = ft_atoi(rgb[0]);
+	g = ft_atoi(rgb[1]);
+	b = ft_atoi(rgb[2]);
+	return ((r << 16) | (g << 8) | b);
+}
 
 static char	*get_each_texture(t_file *file, char *prefix, int offset)
 {
@@ -40,14 +54,16 @@ int	get_textures(t_file *file)
 	file->s_texture = get_each_texture(file, "SO", 2);
 	file->w_texture = get_each_texture(file, "WE", 2);
 	file->e_texture = get_each_texture(file, "EA", 2);
-	file->f_color = get_each_texture(file, "F", 1);
-	file->c_color = get_each_texture(file, "C", 1);
+	file->f_str = get_each_texture(file, "F", 1);
+	file->c_str = get_each_texture(file, "C", 1);
 	if (!file->n_texture || !file->s_texture || !file->w_texture
-		|| !file->e_texture || !file->f_color || !file->c_color)
+		|| !file->e_texture || !file->f_str || !file->c_str)
 	{
 		write(2, "Missing or invalid texture path(s)\n", 35);
 		return (1);
 	}
+	file->f_color = get_bg_color(file->f_str);
+	file->c_color = get_bg_color(file->c_str);
 	return (0);
 }
 

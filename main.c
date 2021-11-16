@@ -85,7 +85,6 @@ int     key_press(int keycode, char **map)
 		pplane.x = pplane.x * cos(0.1) - pplane.y * sin(0.1);
 		pplane.y = oldPlaneX * sin(0.1) + pplane.y * cos(0.1);
 	}
-	printf("%d . %d\n", (int)ppos.y, (int)ppos.x);
 	return (0);
 }
 

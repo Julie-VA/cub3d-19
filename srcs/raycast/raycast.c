@@ -3,28 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/15 15:47:28 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/16 09:38:29 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-unsigned int	get_pixel(t_data *data, t_icoord coord, int side)
+unsigned int	get_pixel(t_data *data, t_icoord coord)
 {
 	char	*color;
 	int		offset;
-	(void)side;
 
 	offset = coord.y * data->line_len + coord.x * (data->bpp / 8);
 	color = data->addr + offset;
-	// printf("color=%d\n", *(unsigned int *)color);
-	// if (!side)
-		return (*(unsigned int *)color);
-	// else
-	// 	return (*(unsigned int *)color / 2);
+	return (*(unsigned int *)color);
 }
 
 void	set_px(t_data *data, t_icoord coord, unsigned int color)
@@ -43,14 +38,6 @@ int	raycast(t_mlx *mlx)
 {
 	int			rays_i = 0;
 
-	for (int i = 0; i < mlx->buff->size.x; i++)
-		for (int j = 0; j < mlx->buff->size.y; j++)
-		{
-			if (j < SCREEN_H / 2)
-				set_px(mlx->buff, (t_icoord) {i, j}, mlx->file->c_color);
-			else
-				set_px(mlx->buff, (t_icoord) {i, j}, mlx->file->f_color);
-		}
 	while (rays_i < SCREEN_W)
 	{
 		double		cameraX = 2 * rays_i / ((double)SCREEN_W) - 1;;
@@ -142,18 +129,26 @@ int	raycast(t_mlx *mlx)
 		double steptex = 1.0 * 64 / lineHeight;
 		double texPos = (drawStart - SCREEN_H / 2 + lineHeight / 2) * steptex;
 
+		for (int i = 0; i < drawStart; i++)
+			set_px(mlx->buff, (t_icoord){rays_i, i}, mlx->file->c_color);
+
+		t_data	*tex;
+
+		if (side == 0 && rayDir.x < 0)
+			tex = mlx->purple;
+		else if (side == 0 && rayDir.x > 0)
+			tex = mlx->blue;
+		else if (side == 1 && rayDir.y > 0)
+			tex = mlx->brick;
+		else
+			tex = mlx->grey;
 		while (drawStart <= drawEnd)
 		{
-			if (side == 0 && rayDir.x < 0)
-				set_px(mlx->buff, (t_icoord){rays_i, drawStart++}, get_pixel(mlx->purple, (t_icoord) {tex_x, (int)texPos & 63}, side));
-			else if (side == 0 && rayDir.x > 0)
-				set_px(mlx->buff, (t_icoord){rays_i, drawStart++}, get_pixel(mlx->blue, (t_icoord) {tex_x, (int)texPos & 63}, side));
-			else if (side == 1 && rayDir.y > 0)
-				set_px(mlx->buff, (t_icoord){rays_i, drawStart++}, get_pixel(mlx->brick, (t_icoord) {tex_x, (int)texPos & 63}, side));
-			else
-				set_px(mlx->buff, (t_icoord){rays_i, drawStart++}, get_pixel(mlx->grey, (t_icoord) {tex_x, (int)texPos & 63}, side));
+			set_px(mlx->buff, (t_icoord){rays_i, drawStart++}, get_pixel(tex, (t_icoord) {tex_x, (int)texPos & 63}));
 			texPos += steptex;
 		}
+		for (int i = drawEnd + 1; i < SCREEN_H; i++)
+			set_px(mlx->buff, (t_icoord){rays_i, i}, mlx->file->f_color);
 		rays_i++;
 	}
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->buff->img, 0, 0);

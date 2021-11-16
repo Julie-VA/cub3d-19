@@ -94,8 +94,11 @@ int     key_press(int keycode, char **map)
 
 void	hook_init(void *mlx, void *win, t_data *purple, t_data *blue, t_data *grey, t_data *brick, t_file *file, t_data *buff)
 {
+	unsigned int	bg_c;
+
+	bg_c = get_bg_color("96, 96, 96");
 	t_mlx	*mlxAll = malloc(sizeof(t_mlx));
-	*mlxAll = (t_mlx){win, mlx, purple, blue, grey, brick, buff, file};
+	*mlxAll = (t_mlx){win, mlx, purple, blue, grey, brick, buff, file, bg_c};
 
 	mlx_hook(win, 2, 1L << 0, key_press, file->map);
 	mlx_hook(win, EVENT_DEST, 0, exit_game, NULL);

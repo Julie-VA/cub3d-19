@@ -36,6 +36,7 @@ typedef struct s_file
 	int				p_pos_x;
 	int				p_pos_y;
 	char			p_ori;
+	char			**minimap;
 }	t_file;
 
 typedef struct s_icoord
@@ -85,6 +86,7 @@ typedef struct s_mlx
 	t_data		*brick;
 	t_data		*buff;
 	t_file		*file;
+	unsigned int	bg_c;
 }				t_mlx;
 
 t_fcoord ppos;
@@ -122,6 +124,7 @@ int		check_last_line(char **raw_file);
 
 int		key_pressnew(int keycode, t_game *game);
 
-t_icoord	print_mini_map(t_file *file, t_data *buff, unsigned int grey);
+char	**set_minimap(t_file *file);
+t_icoord	print_minimap(t_file *file, t_data *buff, unsigned int bg_c);
 
 #endif

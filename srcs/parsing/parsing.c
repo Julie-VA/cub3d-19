@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 11:48:36 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/16 15:23:55 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/16 16:40:20 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,5 +122,15 @@ int	parsing(char *argv, t_file *file)
 	}
 	if (get_pos(file))
 		return (free_all(file));
+	file->minimap = set_minimap(file);
+	if (!file->minimap)
+		return (free_all(file));
+	int y = 0;
+	while (file->minimap[y])
+	{
+		printf("minimap[%d]=%s\n", y, file->minimap[y]);
+		y++;
+	}
+	printf("minimap[%d]=%s\n", y, file->minimap[y]);
 	return (0);
 }

@@ -12,7 +12,7 @@ int	free_file(t_file *file)
 	return (1);
 }
 
-int	free_all(t_file *file)
+int	free_all_but_mini(t_file *file)
 {
 	int	i;
 
@@ -25,5 +25,17 @@ int	free_all(t_file *file)
 		free(file->map[i++]);
 	free(file->map);
 	free(file);
+	return (1);
+}
+
+int	free_all(t_file *file)
+{
+	int i;
+
+	i = 0;
+	free_all_but_mini(file);
+	while (file->minimap[i])
+		free(file->minimap[i++]);
+	free(file->minimap);
 	return (1);
 }

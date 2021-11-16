@@ -104,6 +104,7 @@ int		check_cub(char *str);
 int		raycast(t_mlx *mlx);
 
 int		free_file(t_file *file);
+int		free_all_but_mini(t_file *file);
 int		free_all(t_file *file);
 
 int		parsing(char *argv, t_file *map);

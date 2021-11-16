@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 15:42:36 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/16 16:58:33 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/16 18:47:50 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,25 @@ int	get_maxl(char **map)
 	return (len);
 }
 
-char **alloc_minimap(char **map, int *maxl)
+int	get_multipl(int height, int *maxl)
+{
+	if (*maxl > 200 || height > 150)
+		return (2);
+	else if (*maxl > 130 || height > 100)
+		return (3);
+	else if (*maxl > 90 || height > 60)
+		return (4);
+	else if (*maxl > 45 || height > 30)
+		return (5);
+	else if (*maxl > 25 || height > 15)
+		return (8);
+	else if (*maxl > 20 || height > 10)
+		return (15);
+	else
+		return (25);
+}
+
+char **alloc_minimap(char **map, int *maxl, int *multipl)
 {
 	int	height;
 	char **minimap;
@@ -41,13 +59,14 @@ char **alloc_minimap(char **map, int *maxl)
 
 	*maxl = get_maxl(map);
 	height = get_map_height(map);
-	minimap = (char **)malloc(sizeof(char *) * ((height * 5) + 1));
+	*multipl = get_multipl(height, multipl);
+	minimap = (char **)malloc(sizeof(char *) * ((height * *multipl) + 1));
 	if (!minimap)
 		return (NULL);
 	i = 0;
-	while (i < height * 5)
+	while (i < height * *multipl)
 	{
-		minimap[i] = (char *)malloc(sizeof(char) * ((*maxl * 5) + 1));
+		minimap[i] = (char *)malloc(sizeof(char) * ((*maxl * *multipl) + 1));
 		if (!minimap)
 			return (NULL);
 		i++;
@@ -64,12 +83,13 @@ char	**set_minimap(t_file *file)
 	int	j;
 	int	maxl;
 	char **minimap;
+	int	multipl;
 
 	x = 0;
 	y = 0;
 	i = 0;
 	j = 0;
-	minimap = alloc_minimap(file->map, &maxl);
+	minimap = alloc_minimap(file->map, &maxl, &multipl);
 	if (!minimap)
 		return (NULL);
 	while (file->map[y])
@@ -78,12 +98,12 @@ char	**set_minimap(t_file *file)
 		while (file->map[y][x])
 		{
 			if (file->map[y][x] == '1')
-				minimap[j + (y * 5)][i + (x * 5)] = '1';
+				minimap[j + (y * multipl)][i + (x * multipl)] = '1';
 			else if (file->map[y][x] == ' ')
-				minimap[j + (y * 5)][i + (x * 5)] = ' ';
+				minimap[j + (y * multipl)][i + (x * multipl)] = ' ';
 			else
-				minimap[j + (y * 5)][i + (x * 5)] = '0';
-			if (i == 4)
+				minimap[j + (y * multipl)][i + (x * multipl)] = '0';
+			if (i == multipl - 1)
 			{
 				i = 0;
 				x++;
@@ -93,17 +113,17 @@ char	**set_minimap(t_file *file)
 		}
 		while (x < maxl)
 		{
-			if (i == 5)
+			if (i == multipl)
 			{
 				i = 0;
 				x++;
 				continue ;
 			}
-			minimap[j + (y * 5)][i + (x * 5)] = ' ';
+			minimap[j + (y * multipl)][i + (x * multipl)] = ' ';
 			i++;
 		}
-		minimap[j + (y * 5)][x * 5] = '\0';
-		if (j == 4)
+		minimap[j + (y * multipl)][x * multipl] = '\0';
+		if (j == multipl - 1)
 		{
 			j = 0;;
 			y++;
@@ -111,7 +131,7 @@ char	**set_minimap(t_file *file)
 		}
 		j++;
 	}
-	minimap[y * 5] = NULL;
+	minimap[y * multipl] = NULL;
 	return (minimap);
 }
 

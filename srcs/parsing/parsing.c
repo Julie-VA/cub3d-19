@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 11:48:36 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/15 15:52:38 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/16 15:23:55 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ static int	check_top_bot(char **map, int x, int y, int height)
 	return (0);
 }
 
-static int	check_middle_loop(char **map, int x, int y, int (*vars)[3])
+static int	check_middle_loop(char **map, int x, int y, int height, int *start, int *player)
 {
-	while ((*vars)[1] == 0 && map[y][x] == ' ')
+	while (*start == 0 && map[y][x] == ' ')
 		x++;
-	if ((*vars)[1] == 0 && map[y][x] != '1')
+	if (*start == 0 && map[y][x] != '1')
 		return (-1);
-	(*vars)[1] = 1;
+	*start = 1;
 	if (x == (int)ft_strlen(map[y]) - 1 && map[y][x] != '1')
 		return (-1);
 	if (map[y][x] != '0' && map[y][x] != '1' && map[y][x] != ' '
@@ -48,33 +48,27 @@ static int	check_middle_loop(char **map, int x, int y, int (*vars)[3])
 	if (map[y][x] == 'N' || map[y][x] == 'S'
 		|| map[y][x] == 'W' || map[y][x] == 'E')
 	{
-		if ((*vars)[2] || y == 0 || y == (*vars)[0] || x == 0
+		if (*player == 1 || y == 0 || y == height || x == 0
 			|| x == (int)ft_strlen(map[y]))
 			return (-1);
 		else
-			(*vars)[2] = 1;
+			*player = 1;
 	}
 	if (map[y][x] == ' ')
-		if (check_around(map, x, y, (*vars)[0]))
+		if (check_around(map, x, y, height))
 			return (-1);
 	x++;
 	return (x);
 }
 
-static int	check_middle(char **map, int x, int y, int height)
+static int	check_middle(char **map, int x, int y, int height, int *player)
 {
 	int	start;
-	int	player;
-	int	vars[3];
 
 	start = 0;
-	player = 0;
-	vars[0] = height;
-	vars[1] = start;
-	vars[2] = player;
 	while (map[y][x] && x < (int)ft_strlen(map[y]))
 	{
-		x = check_middle_loop(map, x, y, &vars);
+		x = check_middle_loop(map, x, y, height, &start, player);
 		if (x == -1)
 			return (1);
 	}
@@ -101,7 +95,7 @@ static int	check_map(char **map)
 		}
 		else
 		{
-			if (check_middle(map, x, y, height))
+			if (check_middle(map, x, y, height, &player))
 				return (1);
 		}
 		y++;

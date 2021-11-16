@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/16 14:49:31 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/16 15:25:20 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,7 +195,7 @@ int	raycast(t_mlx *mlx)
 		}
 		for (int i = drawEnd + 1; i < SCREEN_H; i++)
 			if (i > map_size.y || rays_i > map_size.x)
-			set_px(mlx->buff, (t_icoord){rays_i, i}, mlx->file->f_color);
+				set_px(mlx->buff, (t_icoord){rays_i, i}, mlx->file->f_color);
 		rays_i++;
 	}
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->buff->img, 0, 0);

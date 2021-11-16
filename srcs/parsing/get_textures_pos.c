@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 11:50:28 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/16 14:11:59 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/16 15:23:13 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,10 @@ unsigned int	get_bg_color(char *color)
 	r = ft_atoi(rgb[0]);
 	g = ft_atoi(rgb[1]);
 	b = ft_atoi(rgb[2]);
+	free(rgb[0]);
+	free(rgb[1]);
+	free(rgb[2]);
+	free(rgb);
 	return ((r << 16) | (g << 8) | b);
 }
 

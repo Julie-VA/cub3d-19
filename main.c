@@ -10,13 +10,17 @@ int	exit_game(void *arg)
 {
 	(void)arg;
 	exit(1);
+	system("leaks cub3D");
 	return (1);
 }
 
 int     key_press(int keycode, char **map)
 {
 	if (keycode == KEY_ESC)
-			exit(1);
+	{
+		system("leaks cub3D");
+		exit(1);
+	}
 	if (keycode == KEY_W)
 	{
 		if (map[(int)ppos.y][(int)(ppos.x + pdir.x * 0.2)] != '1')

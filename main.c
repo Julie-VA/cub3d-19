@@ -88,10 +88,10 @@ int     key_press(int keycode, char **map)
 	return (0);
 }
 
-void	hook_init(void *mlx, void *win, t_data *purple, t_data *blue, t_data *grey, t_data *brick, t_file *file, t_data *buff, t_data* neuve)
+void	hook_init(void *mlx, void *win, t_data *purple, t_data *blue, t_data *grey, t_data *brick, t_file *file, t_data *buff)
 {
 	t_mlx	*mlxAll = malloc(sizeof(t_mlx));
-	*mlxAll = (t_mlx){win, mlx, purple, blue, grey, brick, buff, neuve, file};
+	*mlxAll = (t_mlx){win, mlx, purple, blue, grey, brick, buff, file};
 
 	mlx_hook(win, 2, 1L << 0, key_press, file->map);
 	mlx_hook(win, EVENT_DEST, 0, exit_game, NULL);
@@ -108,7 +108,6 @@ int	main(int argc, char **argv)
 	t_data	grey;
 	t_data	brick;
 	t_data	buff;
-	t_data	neuve;
 
 	if (argc != 2)
 	{
@@ -153,11 +152,9 @@ int	main(int argc, char **argv)
 		pplane = (t_fcoord) {0, 0.66};
 	}
 	//directions end
-	mlx_win = mlx_new_window(mlx, 1920, 1080, "cub3D");
-	buff.img = mlx_xpm_file_to_image(mlx, "pics/bg.xpm", &(buff.size.x), &(buff.size.y));
+	mlx_win = mlx_new_window(mlx, SCREEN_W, SCREEN_H, "cub3D");
+	buff.img = mlx_new_image(mlx, SCREEN_W, SCREEN_H);
 	buff.addr = mlx_get_data_addr(buff.img, &buff.bpp, &buff.line_len, &buff.endian);
-	neuve.img = mlx_xpm_file_to_image(mlx, "pics/bg.xpm", &(neuve.size.x), &(neuve.size.y));
-	neuve.addr = mlx_get_data_addr(neuve.img, &neuve.bpp, &neuve.line_len, &neuve.endian);
 	purple.img = mlx_xpm_file_to_image(mlx, "pics/purplestone.xpm", &(purple.size.x), &(purple.size.y));
 	purple.addr = mlx_get_data_addr(purple.img, &purple.bpp, &purple.line_len, &purple.endian);
 	blue.img = mlx_xpm_file_to_image(mlx, "pics/bluestone.xpm", &(blue.size.x), &(blue.size.y));
@@ -166,7 +163,7 @@ int	main(int argc, char **argv)
 	grey.addr = mlx_get_data_addr(grey.img, &grey.bpp, &grey.line_len, &grey.endian);
 	brick.img = mlx_xpm_file_to_image(mlx, "pics/redbrick.xpm", &(brick.size.x), &(brick.size.y));
 	brick.addr = mlx_get_data_addr(brick.img, &brick.bpp, &brick.line_len, &brick.endian);
-	hook_init(mlx, mlx_win, &purple, &blue, &grey, &brick, file, &buff, &neuve);
+	hook_init(mlx, mlx_win, &purple, &blue, &grey, &brick, file, &buff);
 	mlx_loop(mlx);
 	free_all(file);
 	return (0);

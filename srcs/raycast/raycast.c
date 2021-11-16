@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
+/*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/16 09:38:29 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/16 14:49:31 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,53 @@ void	set_px(t_data *data, t_icoord coord, unsigned int color)
 	*(unsigned int *)dst = color;
 }
 
+t_icoord	print_mini_map(t_file *file, t_data *buff, unsigned int grey)
+{
+	int	x;
+	int	y;
+	int	i;
+	int	j;
+
+	x = 0;
+	y = 0;
+	i = 0;
+	j = 0;
+	while (file->map[y])
+	{
+		x = 0;
+		while (file->map[y][x])
+		{
+			if (file->map[y][x] == '1')
+				set_px(buff, (t_icoord){i + (x * 5), j + (y * 5)}, 0);
+			else
+				set_px(buff, (t_icoord){i + (x * 5), j + (y * 5)}, grey);
+			if (i == 4)
+			{
+				i = 0;;
+				x++;
+				continue ;
+			}
+			i++;
+		}
+		if (j == 4)
+		{
+			j = 0;;
+			y++;
+			continue ;
+		}
+		j++;
+	}
+	return ((t_icoord){x * 5, y * 5});
+}
+
 int	raycast(t_mlx *mlx)
 {
-	int			rays_i = 0;
+	int				rays_i = 0;
+	unsigned int	grey;
+	t_icoord		map_size;
 
+	grey = get_bg_color("96, 96, 96");
+	map_size = print_mini_map(mlx->file, mlx->buff, grey);
 	while (rays_i < SCREEN_W)
 	{
 		double		cameraX = 2 * rays_i / ((double)SCREEN_W) - 1;;
@@ -130,7 +173,8 @@ int	raycast(t_mlx *mlx)
 		double texPos = (drawStart - SCREEN_H / 2 + lineHeight / 2) * steptex;
 
 		for (int i = 0; i < drawStart; i++)
-			set_px(mlx->buff, (t_icoord){rays_i, i}, mlx->file->c_color);
+			if (i > map_size.y || rays_i > map_size.x)
+				set_px(mlx->buff, (t_icoord){rays_i, i}, mlx->file->c_color);
 
 		t_data	*tex;
 
@@ -144,10 +188,13 @@ int	raycast(t_mlx *mlx)
 			tex = mlx->grey;
 		while (drawStart <= drawEnd)
 		{
-			set_px(mlx->buff, (t_icoord){rays_i, drawStart++}, get_pixel(tex, (t_icoord) {tex_x, (int)texPos & 63}));
+			if (drawStart > map_size.y || rays_i > map_size.x)
+				set_px(mlx->buff, (t_icoord){rays_i, drawStart}, get_pixel(tex, (t_icoord) {tex_x, (int)texPos & 63}));
+			drawStart++;
 			texPos += steptex;
 		}
 		for (int i = drawEnd + 1; i < SCREEN_H; i++)
+			if (i > map_size.y || rays_i > map_size.x)
 			set_px(mlx->buff, (t_icoord){rays_i, i}, mlx->file->f_color);
 		rays_i++;
 	}

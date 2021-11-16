@@ -84,7 +84,6 @@ typedef struct s_mlx
 	t_data		*grey;
 	t_data		*brick;
 	t_data		*buff;
-	t_data		*neuve;
 	t_file		*file;
 }				t_mlx;
 
@@ -110,6 +109,7 @@ int		parsing(char *argv, t_file *map);
 int		get_map_height(char **map);
 int		check_around(char **map, int x, int y, int height);
 
+unsigned int	get_bg_color(char *color);
 int		get_textures(t_file *map);
 int		get_pos(t_file *map);
 

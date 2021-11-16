@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/16 15:25:20 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/16 15:46:06 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,45 +32,6 @@ void	set_px(t_data *data, t_icoord coord, unsigned int color)
 	offset = coord.y * data->line_len + coord.x * (data->bpp / 8);
 	dst = data->addr + offset;
 	*(unsigned int *)dst = color;
-}
-
-t_icoord	print_mini_map(t_file *file, t_data *buff, unsigned int grey)
-{
-	int	x;
-	int	y;
-	int	i;
-	int	j;
-
-	x = 0;
-	y = 0;
-	i = 0;
-	j = 0;
-	while (file->map[y])
-	{
-		x = 0;
-		while (file->map[y][x])
-		{
-			if (file->map[y][x] == '1')
-				set_px(buff, (t_icoord){i + (x * 5), j + (y * 5)}, 0);
-			else
-				set_px(buff, (t_icoord){i + (x * 5), j + (y * 5)}, grey);
-			if (i == 4)
-			{
-				i = 0;;
-				x++;
-				continue ;
-			}
-			i++;
-		}
-		if (j == 4)
-		{
-			j = 0;;
-			y++;
-			continue ;
-		}
-		j++;
-	}
-	return ((t_icoord){x * 5, y * 5});
 }
 
 int	raycast(t_mlx *mlx)
@@ -173,7 +134,7 @@ int	raycast(t_mlx *mlx)
 		double texPos = (drawStart - SCREEN_H / 2 + lineHeight / 2) * steptex;
 
 		for (int i = 0; i < drawStart; i++)
-			if (i > map_size.y || rays_i > map_size.x)
+			if (i >= map_size.y || rays_i >= map_size.x)
 				set_px(mlx->buff, (t_icoord){rays_i, i}, mlx->file->c_color);
 
 		t_data	*tex;
@@ -188,13 +149,13 @@ int	raycast(t_mlx *mlx)
 			tex = mlx->grey;
 		while (drawStart <= drawEnd)
 		{
-			if (drawStart > map_size.y || rays_i > map_size.x)
+			if (drawStart >= map_size.y || rays_i >= map_size.x)
 				set_px(mlx->buff, (t_icoord){rays_i, drawStart}, get_pixel(tex, (t_icoord) {tex_x, (int)texPos & 63}));
 			drawStart++;
 			texPos += steptex;
 		}
 		for (int i = drawEnd + 1; i < SCREEN_H; i++)
-			if (i > map_size.y || rays_i > map_size.x)
+			if (i >= map_size.y || rays_i >= map_size.x)
 				set_px(mlx->buff, (t_icoord){rays_i, i}, mlx->file->f_color);
 		rays_i++;
 	}

@@ -121,4 +121,7 @@ int		check_if_player_on_border(t_file *file, int *i);
 int		check_last_line(char **raw_file);
 
 int		key_pressnew(int keycode, t_game *game);
+
+t_icoord	print_mini_map(t_file *file, t_data *buff, unsigned int grey);
+
 #endif

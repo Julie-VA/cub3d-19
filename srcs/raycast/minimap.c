@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 15:42:36 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/16 18:47:50 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/17 11:55:14 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,7 @@ char	**set_minimap(t_file *file)
 	return (minimap);
 }
 
+/*
 t_icoord	print_minimap(t_file *file, t_data *buff, unsigned int bg_c)
 {
 	int	x;
@@ -157,3 +158,4 @@ t_icoord	print_minimap(t_file *file, t_data *buff, unsigned int bg_c)
 	}
 	return ((t_icoord){x, y});
 }
+*/

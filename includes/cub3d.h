@@ -39,6 +39,12 @@ typedef struct s_file
 	char			**minimap;
 }	t_file;
 
+typedef struct	s_vars
+{
+	void	*mlx;
+	void	*win;
+}				t_vars;
+
 typedef struct s_icoord
 {
 	int	x;
@@ -47,17 +53,15 @@ typedef struct s_icoord
 
 typedef struct s_fcoord
 {
-	double	x;
-	double	y;
+	float	x;
+	float	y;
 }			t_fcoord;
 
 typedef struct s_data {
 	void		*img;
-	void		*bg;
 	char		*addr;
 	int			bpp;
 	t_icoord	size;
-	t_icoord	size_bg;
 	int			line_len;
 	int			endian;
 }				t_data;
@@ -71,30 +75,30 @@ typedef struct s_player
 
 typedef struct s_game
 {
-	t_player	player;
-	char**		map;
+	t_player	*p;
+	char		**map;
 }		t_game;
 
+typedef struct s_tex
+{
+	t_data	purple;
+	t_data	blue;
+	t_data	grey;
+	t_data	brick;
+	unsigned int	f_color;
+	unsigned int	c_color;
+	unsigned int	bg_c;
+}			t_tex;
 
 typedef struct s_mlx
 {
-	void*		win;
-	void*		mlx;
-	t_data		*purple;
-	t_data		*blue;
-	t_data		*grey;
-	t_data		*brick;
-	t_data		*buff;
-	t_file		*file;
-	unsigned int	bg_c;
+	t_vars		vars;
+	t_tex		tex;
+	t_data		buff;
+	t_game		game;
 }				t_mlx;
 
-t_fcoord ppos;
-t_fcoord pdir;
-t_fcoord pplane;
-
-void	set_px(t_data *data, t_icoord coord, unsigned int color);
-
+t_player	*game_init(t_file *file);
 int		get_next_line(int fd, char **line);
 int		ft_modstrlen(const char *s, int mod);
 char	*ft_modstrjoin(char const *s1, char const *s2);

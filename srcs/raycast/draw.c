@@ -6,7 +6,7 @@
 /*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 13:41:23 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/18 14:34:37 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/18 17:06:18 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ t_data	get_side_tex(int side, t_fcoord ray_dir, t_tex tex)
 	else if (side == 0 && ray_dir.x > 0)
 		return (tex.w);
 	else if (side == 1 && ray_dir.y > 0)
-		return (tex.n);
-	return (tex.s);
+		return (tex.s);
+	return (tex.n);
 }
 
 /*

@@ -6,7 +6,7 @@
 /*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 15:14:33 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/18 16:29:21 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/18 17:13:57 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 
 # define SCREEN_W 1920
 # define SCREEN_H 1080
-# define EVENT_DEST 1
+# define EVENT_DEST 17
 
 # define KEY_A 0
 # define KEY_S 1
@@ -104,10 +104,10 @@ typedef struct s_game
 
 typedef struct s_tex
 {
-	t_data	n;
-	t_data	s;
-	t_data	e;
-	t_data	w;
+	t_data			n;
+	t_data			s;
+	t_data			e;
+	t_data			w;
 	unsigned int	f_color;
 	unsigned int	c_color;
 	unsigned int	bg_c;

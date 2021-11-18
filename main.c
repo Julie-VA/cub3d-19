@@ -6,23 +6,27 @@
 /*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 15:20:18 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/18 16:29:30 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/18 17:07:18 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	init_t_file(t_file *file)
+t_file	*init_t_file(void)
 {
+	t_file	*file;
+	file = (t_file *)malloc(sizeof(t_file));
+	if (!file)
+		return (NULL);
 	file->raw_file = NULL;
 	file->map = NULL;
+	return (file);
 }
 
 int	exit_game(void *arg)
 {
 	(void)arg;
 	exit(0);
-	system("leaks cub3D");
 	return (1);
 }
 
@@ -66,11 +70,8 @@ int	main(int argc, char **argv)
 	}
 	if (!check_cub(argv[1]))
 		return (1);
-	file = (t_file *)malloc(sizeof(t_file));
-	if (!file)
-		return (1);
-	init_t_file(file);
-	if (parsing(argv[1], file))
+	file = init_t_file();
+	if (!file || parsing(argv[1], file))
 		return (1);
 	mlx = game_init(file);
 	if (mlx)

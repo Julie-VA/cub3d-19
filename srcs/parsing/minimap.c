@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 15:42:36 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/18 13:36:35 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/18 15:11:28 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,29 @@ char	**set_minimap(t_file *file)
 		return (NULL);
 	maxlmultipl.x = maxl;
 	maxlmultipl.y = multipl;
+	file->multipl = multipl;
 	minimap = minimap_loop(file, minimap, vars, maxlmultipl);
 	return (minimap);
+}
+
+void	draw_player(int multipl, t_data buff, t_fcoord pos)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (i < multipl)
+	{
+		j = 0;
+		while (j < multipl)
+		{
+			buff.addr[(((int)pos.y * multipl) + i) * buff.size.x
+				+ (((int)pos.x * multipl) + j)] = 16711680;
+			j++;
+		}
+		i++;
+	}
 }
 
 t_icoord	print_minimap(char **minimap, t_data buff, unsigned int bg_c)

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/18 15:14:33 by rvan-aud          #+#    #+#             */
+/*   Updated: 2021/11/18 15:30:19 by vneirinc         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CUB3D_H
 # define CUB3D_H
 
@@ -12,9 +24,9 @@
 // debug
 # include<sys/time.h>
 
-#define SCREEN_W 1920
-#define SCREEN_H 1080
-#define EVENT_DEST 1
+# define SCREEN_W 1920
+# define SCREEN_H 1080
+# define EVENT_DEST 1
 
 # define KEY_A 0
 # define KEY_S 1
@@ -40,53 +52,55 @@ typedef struct s_file
 	int				p_pos_y;
 	char			p_ori;
 	char			**minimap;
+	int				multipl;
 }	t_file;
 
-typedef struct	s_vars
+typedef struct s_vars
 {
 	void	*mlx;
 	void	*win;
-}				t_vars;
+}	t_vars;
 
 typedef struct s_icoord
 {
 	int	x;
 	int	y;
-}			t_icoord;
+}	t_icoord;
 
 typedef struct s_fcoord
 {
 	float	x;
 	float	y;
-}			t_fcoord;
+}	t_fcoord;
 
-typedef struct	s_group
+typedef struct s_group
 {
 	t_icoord	xy;
 	t_icoord	ij;
 }	t_group;
 
-typedef struct s_data {
+typedef struct s_data
+{
 	void			*img;
 	unsigned int	*addr;
 	int				bpp;
 	t_icoord		size;
 	int				line_len;
 	int				endian;
-}				t_data;
+}	t_data;
 
 typedef struct s_player
 {
 	t_fcoord	pos;
 	t_fcoord	dir;
 	t_fcoord	plane;
-}				t_player;
+}	t_player;
 
 typedef struct s_game
 {
 	t_player	*p;
 	char		**map;
-}		t_game;
+}	t_game;
 
 typedef struct s_tex
 {
@@ -97,7 +111,7 @@ typedef struct s_tex
 	unsigned int	f_color;
 	unsigned int	c_color;
 	unsigned int	bg_c;
-}			t_tex;
+}	t_tex;
 
 typedef struct s_mlx
 {
@@ -106,13 +120,16 @@ typedef struct s_mlx
 	t_data		buff;
 	t_game		game;
 	char		**minimap;
-}				t_mlx;
+	int			multipl;
+}	t_mlx;
 
-int	tex_init(t_file *file, void *mlx, t_tex *tex);
-void	draw(int lineHeight, t_tex tex_s, unsigned int *buff, unsigned int *tex);
-int		get_tex_x(int side, t_fcoord ray_dir, float perpWallDist, const t_player *p);
-t_data	get_side_tex(int side, t_fcoord ray_dir, t_tex tex);
+void			draw(int lineHeight, t_tex tex_s, unsigned int *buff,
+					unsigned int *tex);
+int				get_tex_x(int side, t_fcoord ray_dir,
+					float perpWallDist, const t_player *p);
+t_data			get_side_tex(int side, t_fcoord ray_dir, t_tex tex);
 
+int				tex_init(t_file *file, void *mlx, t_tex *tex);
 t_player		*game_init(t_file *file);
 int				get_next_line(int fd, char **line);
 int				ft_modstrlen(const char *s, int mod);
@@ -149,5 +166,6 @@ t_icoord		print_minimap(char **minimap, t_data buff, unsigned int bg_c);
 int				get_multipl(int height, int *maxl);
 char			**alloc_minimap(char **map, int *maxl, int *multipl);
 
+void			draw_player(int multipl, t_data buff, t_fcoord pos);
 
 #endif

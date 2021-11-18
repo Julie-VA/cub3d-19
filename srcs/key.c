@@ -6,7 +6,7 @@
 /*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 16:03:30 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/18 15:23:58 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/18 15:59:42 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	key_pressnew(int keycode, t_game *game)
 
 	map = game->map;
 	if (keycode == KEY_ESC)
-		exit(1);
+		exit(0);
 	if (keycode == KEY_W)
 	{
 		if (map[(int)game->p->pos.y][(int)(game->p->pos.x + game->p->dir.x * 0.2)] != '1')

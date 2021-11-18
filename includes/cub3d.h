@@ -60,7 +60,8 @@ typedef struct s_fcoord
 	float	y;
 }			t_fcoord;
 
-typedef struct s_data {
+typedef struct s_data
+{
 	void			*img;
 	unsigned int	*addr;
 	int				bpp;
@@ -102,8 +103,9 @@ typedef struct s_mlx
 	char		**minimap;
 }				t_mlx;
 
-unsigned int	get_pixel(t_data data, t_icoord coord);
-void	set_px(t_data data, t_icoord coord, unsigned int color);
+void	draw(int lineHeight, t_tex tex_s, unsigned int *buff, unsigned int *tex);
+int		get_tex_x(int side, t_fcoord ray_dir, float perpWallDist, const t_player *p);
+t_data	get_side_tex(int side, t_fcoord ray_dir, t_tex tex);
 
 t_player	*game_init(t_file *file);
 int		get_next_line(int fd, char **line);

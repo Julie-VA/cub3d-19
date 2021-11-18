@@ -6,7 +6,7 @@
 /*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/18 10:54:40 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/18 11:19:44 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,64 +14,69 @@
 
 t_fcoord	get_ray_dir(int rays_i, t_player *p)
 {
-	t_fcoord	rayDir;
-	float		cameraX = 2 * rays_i / ((float)SCREEN_W) - 1;;
+	t_fcoord	ray_dir;
+	float		camera_x;
 
-	rayDir.x = p->dir.x + p->plane.x * cameraX;
-	rayDir.y = p->dir.y + p->plane.y * cameraX;
-	return (rayDir);
+	camera_x = 2 * rays_i / ((float)SCREEN_W) - 1;
+	ray_dir.x = p->dir.x + p->plane.x * camera_x;
+	ray_dir.y = p->dir.y + p->plane.y * camera_x;
+	return (ray_dir);
 }
 
-t_fcoord	init_side_dist(t_fcoord rayDir, t_player *p, t_fcoord deltaDist, t_icoord *step)
+t_fcoord	init_side_dist(t_fcoord ray_dir, t_player *p,
+	t_fcoord delta_dist, t_icoord *step)
 {
-	t_fcoord	sideDist;
+	t_fcoord	side_dist;
 	t_icoord	map;
 
-	map.x = (int)p->pos.x; 
-	map.y = (int)p->pos.y; 
-	if (rayDir.x < 0)
+	map.x = (int)p->pos.x;
+	map.y = (int)p->pos.y;
+	if (ray_dir.x < 0)
 	{
 		step->x = -1;
-		sideDist.x = (p->pos.x - map.x) * deltaDist.x;
+		side_dist.x = (p->pos.x - map.x) * delta_dist.x;
 	}
 	else
 	{
 		step->x = 1;
-		sideDist.x = (map.x + 1.0 - p->pos.x) * deltaDist.x;
+		side_dist.x = (map.x + 1.0 - p->pos.x) * delta_dist.x;
 	}
-	if (rayDir.y < 0)
+	if (ray_dir.y < 0)
 	{
 		step->y = -1;
-		sideDist.y = (p->pos.y - map.y) * deltaDist.y;
+		side_dist.y = (p->pos.y - map.y) * delta_dist.y;
 	}
 	else
 	{
 		step->y = 1;
-		sideDist.y = (map.y + 1.0 - p->pos.y) * deltaDist.y;
+		side_dist.y = (map.y + 1.0 - p->pos.y) * delta_dist.y;
 	}
-	return (sideDist);
+	return (side_dist);
 }
-float	launch_rays(const t_game game, t_fcoord deltaDist, t_fcoord rayDir, int *side)
+
+float	launch_rays(const t_game game, t_fcoord delta_dist,
+	t_fcoord ray_dir, int *side)
 {
-	int	hit = 0;
+	int			hit;
 	t_icoord	step;
 	t_icoord	map;
-	t_fcoord	sideDist;
+	t_fcoord	side_dist;
 
-	map.x = (int)game.p->pos.x; 
-	map.y = (int)game.p->pos.y; 
-	sideDist = init_side_dist(rayDir, game.p, deltaDist, &step);
-	while(!hit)
+	hit = 0;
+	map.x = (int)game.p->pos.x;
+	map.y = (int)game.p->pos.y;
+	side_dist = init_side_dist(ray_dir, game.p, delta_dist, &step);
+	while (!hit)
 	{
-		if (sideDist.x < sideDist.y)
+		if (side_dist.x < side_dist.y)
 		{
-			sideDist.x += deltaDist.x;
+			side_dist.x += delta_dist.x;
 			map.x += step.x;
 			*side = 0;
 		}
 		else
 		{
-			sideDist.y += deltaDist.y;
+			side_dist.y += delta_dist.y;
 			map.y += step.y;
 			*side = 1;
 		}
@@ -79,81 +84,83 @@ float	launch_rays(const t_game game, t_fcoord deltaDist, t_fcoord rayDir, int *s
 			hit = 1;
 	}
 	if (*side == 0)
-		return sideDist.x - deltaDist.x;
-	return sideDist.y - deltaDist.y;
+		return (side_dist.x - delta_dist.x);
+	return (side_dist.y - delta_dist.y);
 }
 
-float	loop_rays(t_game game, t_fcoord rayDir, int *side)
+float	loop_rays(t_game game, t_fcoord ray_dir, int *side)
 {
-	t_fcoord	deltaDist;
-	float	dist;
+	t_fcoord	delta_dist;
 
-	if (rayDir.x != 0)
-		deltaDist.x = fabs(1 / rayDir.x);
+	if (ray_dir.x != 0)
+		delta_dist.x = fabs(1 / ray_dir.x);
 	else
-		deltaDist.x = MAXFLOAT;
-	if (rayDir.y != 0)
-		deltaDist.y = fabs(1 / rayDir.y);
+		delta_dist.x = MAXFLOAT;
+	if (ray_dir.y != 0)
+		delta_dist.y = fabs(1 / ray_dir.y);
 	else
-		deltaDist.y = MAXFLOAT;
-	dist = launch_rays(game, deltaDist, rayDir, side);
-	return dist;
+		delta_dist.y = MAXFLOAT;
+	return (launch_rays(game, delta_dist, ray_dir, side));
 }
 
-int	get_tex_x(int side, t_fcoord rayDir, float perpWallDist, const t_player *p)
+int	get_tex_x(int side, t_fcoord ray_dir, float perpWallDist, const t_player *p)
 {
 	float	wall_x;
 	int		tex_x;
 
 	if (side == 0)
-		wall_x = p->pos.y + perpWallDist * rayDir.y;
+		wall_x = p->pos.y + perpWallDist * ray_dir.y;
 	else
-		wall_x = p->pos.x + perpWallDist * rayDir.x;
+		wall_x = p->pos.x + perpWallDist * ray_dir.x;
 	wall_x -= floor(wall_x);
 	tex_x = wall_x * 64;
-	if(side == 0 && rayDir.x > 0)
+	if (side == 0 && ray_dir.x > 0)
 		tex_x = 64 - tex_x - 1;
-	if(side == 1 && rayDir.y < 0)
+	if (side == 1 && ray_dir.y < 0)
 		tex_x = 64 - tex_x - 1;
 	return (tex_x);
 }
 
-t_data	get_side_tex(int side, t_fcoord rayDir, t_tex tex)
+t_data	get_side_tex(int side, t_fcoord ray_dir, t_tex tex)
 {
-	if (side == 0 && rayDir.x < 0)
+	if (side == 0 && ray_dir.x < 0)
 		return (tex.purple);
-	else if (side == 0 && rayDir.x > 0)
+	else if (side == 0 && ray_dir.x > 0)
 		return (tex.blue);
-	else if (side == 1 && rayDir.y > 0)
+	else if (side == 1 && ray_dir.y > 0)
 		return (tex.brick);
 	return (tex.grey);
 }
 
-void  draw(int lineHeight, t_mlx *mlx, int rays_i, t_data tex, int tex_x, t_data img)
+void	draw(int lineHeight, t_mlx *mlx, int rays_i,
+	t_data tex, int tex_x, t_data img)
 {
-	int	drawStart;
-	int	drawEnd;
-	float steptex;
-	float texPos;
+	int		draw_start;
+	int		draw_end;
+	float	steptex;
+	float	texpos;
+	int		i;
 
-    drawStart = -lineHeight / 2 + SCREEN_H / 2;
-    drawEnd = lineHeight / 2 + SCREEN_H / 2;
-	if (drawStart < 0)
-		drawStart = 0;
-	if (drawEnd >= SCREEN_H)
-		drawEnd = SCREEN_H - 1;
+	i = 0;
+	draw_start = -lineHeight / 2 + SCREEN_H / 2;
+	draw_end = lineHeight / 2 + SCREEN_H / 2;
+	if (draw_start < 0)
+		draw_start = 0;
+	if (draw_end >= SCREEN_H)
+		draw_end = SCREEN_H - 1;
 	steptex = 1.0 * 64 / lineHeight;
-	texPos = (drawStart - SCREEN_H / 2 + lineHeight / 2) * steptex;
-	for (int i = 0; i < drawStart; i++)
-		img.addr[i * img.size.x + rays_i] = mlx->tex.c_color;
-	while (drawStart <= drawEnd)
+	texpos = (draw_start - SCREEN_H / 2 + lineHeight / 2) * steptex;
+	while (i < draw_start)
+		img.addr[i++ * img.size.x + rays_i] = mlx->tex.c_color;
+	while (i <= draw_end)
 	{
-		img.addr[drawStart * img.size.x + rays_i] = tex.addr[((int)texPos & 63) * tex.size.x + tex_x];
-		drawStart++;
-		texPos += steptex;
+		// normi bug
+		img.addr[i * img.size.x + rays_i] = tex.addr[((int)texpos & 63) * tex.size.x + tex_x];
+		i++;
+		texpos += steptex;
 	}
-	for (int i = drawEnd + 1; i < SCREEN_H; i++)
-		img.addr[i * img.size.x + rays_i] = mlx->tex.f_color;
+	while (i < SCREEN_H)
+		img.addr[i++ * img.size.x + rays_i] = mlx->tex.f_color;
 }
 
 int	raycast(t_mlx *mlx)
@@ -161,7 +168,7 @@ int	raycast(t_mlx *mlx)
 	int			rays_i;
 	int			side;
 	float		perpWallDist;
-	t_fcoord	rayDir;
+	t_fcoord	ray_dir;
 
 	rays_i = 0;
    // struct timeval te; 
@@ -169,12 +176,12 @@ int	raycast(t_mlx *mlx)
     //long long milliseconds = te.tv_sec*1000LL + te.tv_usec/1000; // calculate milliseconds
 	while (rays_i < SCREEN_W)
 	{
-		rayDir = get_ray_dir(rays_i, mlx->game.p);
-		perpWallDist = loop_rays(mlx->game, rayDir, &side);
+		ray_dir = get_ray_dir(rays_i, mlx->game.p);
+		perpWallDist = loop_rays(mlx->game, ray_dir, &side);
 		draw(
 			SCREEN_H / perpWallDist, mlx, rays_i,
-			get_side_tex(side, rayDir, mlx->tex),
-			get_tex_x(side, rayDir, perpWallDist, mlx->game.p),
+			get_side_tex(side, ray_dir, mlx->tex),
+			get_tex_x(side, ray_dir, perpWallDist, mlx->game.p),
 			mlx->buff
 			);
 		rays_i++;

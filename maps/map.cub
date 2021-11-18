@@ -1,7 +1,7 @@
-NO ./pics/redbrick.xpm
-SO ./pics/redbrick.xpm
-WE ./pics/redbrick.xpm
-EA ./pics/redbrick.xpm
+NO ./textures/redbrick.xpm
+SO ./textures/greystone.xpm
+WE ./textures/bluestone.xpm
+EA ./textures/wood.xpm
 
 F 117,141,79
 C 139,180,204

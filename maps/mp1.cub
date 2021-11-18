@@ -1,10 +1,10 @@
-NO ./pics/purplestone.xpm
-SO ./pics/redbrick.xpm
-WE ./pics/redbrick.xpm
-EA ./pics/redbrick.xpm
+NO ./textures/purplestone.xpm
+SO ./textures/mossy.xpm
+WE ./textures/redbrick.xpm
+EA ./textures/wood.xpm
 
-F 117,141,79
-C 139,180,204
+F 80,141,79
+C 90,180,204
 
 11111111
 10000011

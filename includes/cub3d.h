@@ -150,7 +150,7 @@ t_icoord		print_minimap(char **minimap, t_data buff, unsigned int bg_c);
 int				get_multipl(int height, int *maxl);
 char			**alloc_minimap(char **map, int *maxl, int *multipl);
 
-void	draw_player(int multipl, t_data buff, t_player *p);
+void			draw_player(int multipl, t_data buff, t_fcoord pos);
 
 
 #endif

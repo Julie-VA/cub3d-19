@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/18 14:36:42 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/18 15:03:57 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int	raycast(t_mlx *mlx)
 		rays_i++;
 	}
 	print_minimap(mlx->minimap, mlx->buff, mlx->tex.bg_c);
-	draw_player(mlx->multipl, mlx->buff, mlx->game.p);
+	draw_player(mlx->multipl, mlx->buff, mlx->game.p->pos);
 	mlx_put_image_to_window(mlx->vars.mlx, mlx->vars.win, mlx->buff.img, 0, 0);
 	return (0);
 }

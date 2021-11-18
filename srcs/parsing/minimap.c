@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 15:42:36 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/18 14:59:04 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/18 15:11:28 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ char	**set_minimap(t_file *file)
 	return (minimap);
 }
 
-void	draw_player(int multipl, t_data buff, t_player *p)
+void	draw_player(int multipl, t_data buff, t_fcoord pos)
 {
 	int	i;
 	int	j;
@@ -97,7 +97,8 @@ void	draw_player(int multipl, t_data buff, t_player *p)
 		j = 0;
 		while (j < multipl)
 		{
-			buff.addr[(((int)p->pos.y * multipl) + i) * buff.size.x + (((int)p->pos.x * multipl) + j)] = 16711680;
+			buff.addr[(((int)pos.y * multipl) + i) * buff.size.x
+				+ (((int)pos.x * multipl) + j)] = 16711680;
 			j++;
 		}
 		i++;

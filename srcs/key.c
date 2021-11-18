@@ -6,68 +6,74 @@
 /*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 16:03:30 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/18 16:08:09 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/18 16:28:42 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	key_pressnew(int keycode, t_game *game)
+static void	key_w(char **map, t_game *g)
 {
-	char**	map;
+	if (map[(int)g->p->pos.y][(int)(g->p->pos.x + g->p->dir.x * 0.2)] != '1')
+		g->p->pos.x += g->p->dir.x * 0.2;
+	if (map[(int)(g->p->pos.y + g->p->dir.y * 0.2)][(int)g->p->pos.x] != '1')
+		g->p->pos.y += g->p->dir.y * 0.2;
+}
+
+static void	key_s(char **map, t_game *g)
+{
+	if (map[(int)g->p->pos.y][(int)(g->p->pos.x - g->p->dir.x * 0.2)] != '1')
+		g->p->pos.x -= g->p->dir.x * 0.2;
+	if (map[(int)(g->p->pos.y - g->p->dir.y * 0.2)][(int)g->p->pos.x] != '1')
+		g->p->pos.y -= g->p->dir.y * 0.2;
+}
+
+static void	key_d(char **map, t_game *g)
+{
+	if (map[(int)g->p->pos.y][(int)(g->p->pos.x + (g->p->dir.x * cos(1.5708)
+			- g->p->dir.y * sin(1.5708)) * 0.2)] != '1')
+		g->p->pos.x += (g->p->dir.x * cos(1.5708)
+				- g->p->dir.y * sin(1.5708)) * 0.2;
+	if (map[(int)(g->p->pos.y + (g->p->dir.x * sin(1.5708)
+				+ g->p->dir.y * cos(1.5708)) * 0.2)][(int)g->p->pos.x] != '1')
+		g->p->pos.y += (g->p->dir.x * sin(1.5708)
+				+ g->p->dir.y * cos(1.5708)) * 0.2;
+}
+
+static void	key_a(char **map, t_game *g)
+{
+	if (map[(int)g->p->pos.y][(int)(g->p->pos.x + (g->p->dir.x * cos(-1.5708)
+			- g->p->dir.y * sin(-1.5708)) * 0.2)] != '1')
+		g->p->pos.x += (g->p->dir.x * cos(-1.5708)
+				- g->p->dir.y * sin(-1.5708)) * 0.2;
+	if (map[(int)(g->p->pos.y + (g->p->dir.x * sin(-1.5708)
+				+ g->p->dir.y * cos(-1.5708)) * 0.2)][(int)g->p->pos.x] != '1')
+		g->p->pos.y += (g->p->dir.x * sin(-1.5708)
+				+ g->p->dir.y * cos(-1.5708)) * 0.2;
+}
+
+int	key_press(int keycode, t_game *game)
+{
+	char	**map;
+	float	old_dirx;
+	float	old_planex;
 
 	map = game->map;
+	old_dirx = game->p->dir.x;
+	old_planex = game->p->plane.x;
 	if (keycode == KEY_ESC)
 		exit(0);
 	if (keycode == KEY_W)
-	{
-		if (map[(int)game->p->pos.y][(int)(game->p->pos.x + game->p->dir.x * 0.2)] != '1')
-			game->p->pos.x += game->p->dir.x * 0.2;
-		if (map[(int)(game->p->pos.y + game->p->dir.y * 0.2)][(int)game->p->pos.x] != '1')
-			game->p->pos.y += game->p->dir.y * 0.2;
-	}
+		key_w(map, game);
 	if (keycode == KEY_S)
-	{
-		if (map[(int)game->p->pos.y][(int)(game->p->pos.x - game->p->dir.x * 0.2)] != '1')
-			game->p->pos.x -= game->p->dir.x * 0.2;
-		if (map[(int)(game->p->pos.y - game->p->dir.y * 0.2)][(int)game->p->pos.x] != '1')
-			game->p->pos.y -= game->p->dir.y * 0.2;
-	}
+		key_s(map, game);
 	if (keycode == KEY_D)
-	{
-		if (map[(int)game->p->pos.y][(int)(game->p->pos.x + (game->p->dir.x * cos(1.5708) - game->p->dir.y * sin(1.5708)) * 0.2)] != '1')
-			game->p->pos.x += (game->p->dir.x * cos(1.5708) - game->p->dir.y * sin(1.5708)) * 0.2;
-		if (map[(int)(game->p->pos.y + (game->p->dir.x * sin(1.5708) + game->p->dir.y * cos(1.5708)) * 0.2)][(int)game->p->pos.x] != '1')
-			game->p->pos.y += (game->p->dir.x * sin(1.5708) + game->p->dir.y * cos(1.5708)) * 0.2;
-	}
+		key_d(map, game);
 	if (keycode == KEY_A)
-	{
-		if (map[(int)game->p->pos.y][(int)(game->p->pos.x + (game->p->dir.x * cos(-1.5708) - game->p->dir.y * sin(-1.5708)) * 0.2)] != '1')
-			game->p->pos.x += (game->p->dir.x * cos(-1.5708) - game->p->dir.y * sin(-1.5708)) * 0.2;
-		if (map[(int)(game->p->pos.y + (game->p->dir.x * sin(-1.5708) + game->p->dir.y * cos(-1.5708)) * 0.2)][(int)game->p->pos.x] != '1')
-			game->p->pos.y += (game->p->dir.x * sin(-1.5708) + game->p->dir.y * cos(-1.5708)) * 0.2;
-	}
+		key_a(map, game);
 	if (keycode == KEY_R)
-	{
-		float	oldDirx = game->p->dir.x;
-		float	oldPlaneX = game->p->plane.x;
-
-		game->p->dir.x = game->p->dir.x * cos(0.1) - game->p->dir.y * sin(0.1);
-		game->p->dir.y = oldDirx * sin(0.1) + game->p->dir.y * cos(0.1);
-
-		game->p->plane.x = game->p->plane.x * cos(0.1) - game->p->plane.y * sin(0.1);
-		game->p->plane.y = oldPlaneX * sin(0.1) + game->p->plane.y * cos(0.1);
-	}
+		key_r(game, old_dirx, old_planex);
 	if (keycode == KEY_L)
-	{
-		float	oldDirx = game->p->dir.x;
-		float	oldPlaneX = game->p->plane.x;
-
-		game->p->dir.x = game->p->dir.x * cos(-0.1) - game->p->dir.y * sin(-0.1);
-		game->p->dir.y = oldDirx * sin(-0.1) + game->p->dir.y * cos(-0.1);
-
-		game->p->plane.x = game->p->plane.x * cos(-0.1) - game->p->plane.y * sin(-0.1);
-		game->p->plane.y = oldPlaneX * sin(-0.1) + game->p->plane.y * cos(-0.1);
-	}
+		key_l(game, old_dirx, old_planex);
 	return (0);
 }

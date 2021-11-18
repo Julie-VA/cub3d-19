@@ -31,8 +31,9 @@ SRCS		=	main.c 								\
 				$(PARSING_DIR)/read_file.c			\
 				$(RAYCAST_DIR)/raycast.c			\
 				$(RAYCAST_DIR)/draw.c				\
+				$(SRCS_DIR)/key_rotations.c			\
 				$(SRCS_DIR)/key.c					\
-				$(SRCS_DIR)/init.c
+				$(SRCS_DIR)/init.c					\
 
 OBJS		=	$(SRCS:%.c=%.o)
 

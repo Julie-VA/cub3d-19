@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 15:14:33 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/18 16:34:35 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/18 18:02:45 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 # define SCREEN_W 1920
 # define SCREEN_H 1080
-# define EVENT_DEST 1
+# define EVENT_DEST 17
 
 # define KEY_A 0
 # define KEY_S 1
@@ -96,7 +96,7 @@ typedef struct s_player
 typedef struct s_game
 {
 	t_player	*p;
-	char		**map;
+	t_file		*file;
 }	t_game;
 
 typedef struct s_tex
@@ -115,9 +115,10 @@ typedef struct s_mlx
 	t_vars		vars;
 	t_tex		tex;
 	t_data		buff;
-	t_game		game;
-	char		**minimap;
-	int			multipl;
+	t_game		*game;
+	t_file		*file;
+	// char		**minimap;
+	// int			multipl;
 }	t_mlx;
 
 /*
@@ -198,6 +199,6 @@ t_player		*player_init(t_file *file);
 // key_rotations
 void			key_r(t_game *g, float old_dirx, float old_planex);
 void			key_l(t_game *g, float old_dirx, float old_planex);
-int				key_press(int keycode, t_game *game);
+int				key_press(int keycode, t_mlx *mlx_all);
 
 #endif

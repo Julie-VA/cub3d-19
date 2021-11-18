@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
+/*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 15:20:18 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/18 16:29:30 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/18 18:00:37 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ void	init_t_file(t_file *file)
 	file->map = NULL;
 }
 
-int	exit_game(void *arg)
+int	exit_game(t_mlx *mlx_all)
 {
-	(void)arg;
+	free_all(mlx_all->file);
+	free(mlx_all->game);
+	free(mlx_all);
 	exit(0);
-	system("leaks cub3D");
-	return (1);
 }
 
 int	hook_init(t_vars vars, t_tex tex, t_file *file, t_data buff)
@@ -43,10 +43,10 @@ int	hook_init(t_vars vars, t_tex tex, t_file *file, t_data buff)
 		free(mlx_all);
 		return (0);
 	}
-	*game = (t_game){player_init(file), file->map};
-	*mlx_all = (t_mlx){vars, tex, buff, *game, file->minimap, file->multipl};
-	mlx_hook(vars.win, 2, 1L << 0, key_press, game);
-	mlx_hook(vars.win, EVENT_DEST, 0, exit_game, NULL);
+	*game = (t_game){player_init(file), file};
+	*mlx_all = (t_mlx){vars, tex, buff, game, file};
+	mlx_hook(vars.win, 2, 1L << 0, key_press, mlx_all);
+	mlx_hook(vars.win, EVENT_DEST, 0, exit_game, mlx_all);
 	mlx_loop_hook(vars.mlx, raycast, mlx_all);
 	return (1);
 }

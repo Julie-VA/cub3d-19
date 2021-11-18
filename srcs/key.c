@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   key.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
+/*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 16:03:30 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/18 16:28:42 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/18 18:02:54 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,28 +52,31 @@ static void	key_a(char **map, t_game *g)
 				+ g->p->dir.y * cos(-1.5708)) * 0.2;
 }
 
-int	key_press(int keycode, t_game *game)
+int	key_press(int keycode, t_mlx *mlx_all)
 {
 	char	**map;
 	float	old_dirx;
 	float	old_planex;
 
-	map = game->map;
-	old_dirx = game->p->dir.x;
-	old_planex = game->p->plane.x;
+	map = mlx_all->game->file->map;
+	old_dirx = mlx_all->game->p->dir.x;
+	old_planex = mlx_all->game->p->plane.x;
 	if (keycode == KEY_ESC)
+	{
+		free_all(mlx_all->game->file);
 		exit(0);
+	}
 	if (keycode == KEY_W)
-		key_w(map, game);
+		key_w(map, mlx_all->game);
 	if (keycode == KEY_S)
-		key_s(map, game);
+		key_s(map, mlx_all->game);
 	if (keycode == KEY_D)
-		key_d(map, game);
+		key_d(map, mlx_all->game);
 	if (keycode == KEY_A)
-		key_a(map, game);
+		key_a(map, mlx_all->game);
 	if (keycode == KEY_R)
-		key_r(game, old_dirx, old_planex);
+		key_r(mlx_all->game, old_dirx, old_planex);
 	if (keycode == KEY_L)
-		key_l(game, old_dirx, old_planex);
+		key_l(mlx_all->game, old_dirx, old_planex);
 	return (0);
 }

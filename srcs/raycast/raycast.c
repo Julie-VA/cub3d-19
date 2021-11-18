@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
+/*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/18 16:28:49 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/18 18:01:50 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ float	launch_rays(const t_game game, t_fcoord delta_dist,
 
 	map = (t_icoord){game.p->pos.x, game.p->pos.y};
 	side_dist = init_side_dist(ray_dir, game.p, delta_dist, &step);
-	while (game.map[map.y][map.x] != '1')
+	while (game.file->map[map.y][map.x] != '1')
 	{
 		if (side_dist.x < side_dist.y)
 		{
@@ -107,18 +107,18 @@ int	raycast(t_mlx *mlx)
 	rays_i = 0;
 	while (rays_i < SCREEN_W)
 	{
-		ray_dir = get_ray_dir(rays_i, mlx->game.p);
-		perp_wall_dist = loop_rays(mlx->game, ray_dir, &side);
+		ray_dir = get_ray_dir(rays_i, mlx->game->p);
+		perp_wall_dist = loop_rays(*mlx->game, ray_dir, &side);
 		draw(
 			SCREEN_H / perp_wall_dist, mlx->tex,
 			mlx->buff.addr + rays_i,
 			get_side_tex(side, ray_dir, mlx->tex).addr
-			+ get_tex_x(side, ray_dir, perp_wall_dist, mlx->game.p)
+			+ get_tex_x(side, ray_dir, perp_wall_dist, mlx->game->p)
 			);
 		rays_i++;
 	}
-	print_minimap(mlx->minimap, mlx->buff, mlx->tex.bg_c);
-	draw_player(mlx->multipl, mlx->buff, mlx->game.p->pos);
+	print_minimap(mlx->file->minimap, mlx->buff, mlx->tex.bg_c);
+	draw_player(mlx->file->multipl, mlx->buff, mlx->game->p->pos);
 	mlx_put_image_to_window(mlx->vars.mlx, mlx->vars.win, mlx->buff.img, 0, 0);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 16:03:30 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/18 11:05:08 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/18 14:20:16 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,14 @@ int	key_pressnew(int keycode, t_game *game)
 	}
 	if (keycode == KEY_A)
 	{
-		if (map[(int)game->p->pos.y][(int)(game->p->pos.x + (game->p->dir.x * cos(1.5708) - game->p->dir.y * sin(1.5708)) * 0.2 - game->p->dir.x * 0.2)] != '1')
+		if (map[(int)game->p->pos.y][(int)(game->p->pos.x + (game->p->dir.x * cos(1.5708) - game->p->dir.y * sin(1.5708)) * 0.2)] != '1')
 			game->p->pos.x += (game->p->dir.x * cos(1.5708) - game->p->dir.y * sin(1.5708)) * 0.2;
 		if (map[(int)(game->p->pos.y + (game->p->dir.x * sin(1.5708) + game->p->dir.y * cos(1.5708)) * 0.2)][(int)game->p->pos.x] != '1')
 			game->p->pos.y += (game->p->dir.x * sin(1.5708) + game->p->dir.y * cos(1.5708)) * 0.2;
 	}
 	if (keycode == KEY_D)
 	{
-		if (map[(int)game->p->pos.y][(int)(game->p->pos.x + (game->p->dir.x * cos(-1.5708) - game->p->dir.y * sin(-1.5708)) * 0.2 - game->p->dir.x * 0.2)] != '1')
+		if (map[(int)game->p->pos.y][(int)(game->p->pos.x + (game->p->dir.x * cos(-1.5708) - game->p->dir.y * sin(-1.5708)) * 0.2)] != '1')
 			game->p->pos.x += (game->p->dir.x * cos(-1.5708) - game->p->dir.y * sin(-1.5708)) * 0.2;
 		if (map[(int)(game->p->pos.y + (game->p->dir.x * sin(-1.5708) + game->p->dir.y * cos(-1.5708)) * 0.2)][(int)game->p->pos.x] != '1')
 			game->p->pos.y += (game->p->dir.x * sin(-1.5708) + game->p->dir.y * cos(-1.5708)) * 0.2;

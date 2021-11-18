@@ -60,8 +60,13 @@ typedef struct s_fcoord
 	float	y;
 }			t_fcoord;
 
-typedef struct s_data
+typedef struct	s_group
 {
+	t_icoord	xy;
+	t_icoord	ij;
+}	t_group;
+
+typedef struct s_data {
 	void			*img;
 	unsigned int	*addr;
 	int				bpp;
@@ -107,38 +112,41 @@ void	draw(int lineHeight, t_tex tex_s, unsigned int *buff, unsigned int *tex);
 int		get_tex_x(int side, t_fcoord ray_dir, float perpWallDist, const t_player *p);
 t_data	get_side_tex(int side, t_fcoord ray_dir, t_tex tex);
 
-t_player	*game_init(t_file *file);
-int		get_next_line(int fd, char **line);
-int		ft_modstrlen(const char *s, int mod);
-char	*ft_modstrjoin(char const *s1, char const *s2);
+t_player		*game_init(t_file *file);
+int				get_next_line(int fd, char **line);
+int				ft_modstrlen(const char *s, int mod);
+char			*ft_modstrjoin(char const *s1, char const *s2);
 
-char	**read_file(char *argv);
-int		check_cub(char *str);
-int		raycast(t_mlx *mlx);
+char			**read_file(char *argv);
+int				check_cub(char *str);
+int				raycast(t_mlx *mlx);
 
-int		free_file(t_file *file);
-int		free_all_but_mini(t_file *file);
-int		free_all(t_file *file);
+int				free_file(t_file *file);
+int				free_all_but_mini(t_file *file);
+int				free_all(t_file *file);
 
-int		parsing(char *argv, t_file *map);
+int				parsing(char *argv, t_file *map);
 
-int		get_map_height(char **map);
-int		check_around(char **map, int x, int y, int height);
+int				get_map_height(char **map);
+int				check_around(char **map, int x, int y, int height);
 
 unsigned int	get_bg_color(char *color);
-int		get_textures(t_file *map);
-int		get_pos(t_file *map);
+int				get_textures(t_file *map);
+int				get_pos(t_file *map);
 
-int		get_map(t_file *map, int i);
+int				get_map(t_file *map, int i);
 
-int		check_only_spaces(char *line);
-int		check_after_space(char *line);
-int		check_if_player_on_border(t_file *file, int *i);
-int		check_last_line(char **raw_file);
+int				check_only_spaces(char *line);
+int				check_after_space(char *line);
+int				check_if_player_on_border(t_file *file, int *i);
+int				check_last_line(char **raw_file);
 
-int		key_pressnew(int keycode, t_game *game);
+int				key_pressnew(int keycode, t_game *game);
 
-char	**set_minimap(t_file *file);
-t_icoord	print_minimap(char **minimap, t_data buff, unsigned int bg_c);
+char			**set_minimap(t_file *file);
+t_icoord		print_minimap(char **minimap, t_data buff, unsigned int bg_c);
+int				get_multipl(int height, int *maxl);
+char			**alloc_minimap(char **map, int *maxl, int *multipl);
+
 
 #endif

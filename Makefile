@@ -22,12 +22,13 @@ SRCS		=	main.c 								\
 				$(PARSING_DIR)/get_map.c			\
 				$(PARSING_DIR)/get_map_checks.c		\
 				$(PARSING_DIR)/get_textures_pos.c	\
+				$(PARSING_DIR)/minimap.c			\
+				$(PARSING_DIR)/minimap_utils.c		\
 				$(PARSING_DIR)/modgnl_utils.c		\
 				$(PARSING_DIR)/modgnl.c				\
 				$(PARSING_DIR)/parsing.c			\
 				$(PARSING_DIR)/parsing_utils.c		\
 				$(PARSING_DIR)/read_file.c			\
-				$(RAYCAST_DIR)/minimap.c			\
 				$(RAYCAST_DIR)/raycast.c			\
 				$(RAYCAST_DIR)/draw.c				\
 				$(SRCS_DIR)/key.c					\

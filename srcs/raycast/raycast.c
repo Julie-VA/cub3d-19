@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vneirinc <vneirinc@students.s19.be>        +#+  +:+       +#+        */
+/*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/18 08:55:45 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/18 10:54:40 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,15 +145,15 @@ void  draw(int lineHeight, t_mlx *mlx, int rays_i, t_data tex, int tex_x, t_data
 	steptex = 1.0 * 64 / lineHeight;
 	texPos = (drawStart - SCREEN_H / 2 + lineHeight / 2) * steptex;
 	for (int i = 0; i < drawStart; i++)
-		set_px(img, (t_icoord){rays_i, i}, mlx->tex.c_color);
+		img.addr[i * img.size.x + rays_i] = mlx->tex.c_color;
 	while (drawStart <= drawEnd)
 	{
-		set_px(img, (t_icoord){rays_i, drawStart}, get_pixel(tex, (t_icoord) {tex_x, (int)texPos & 63}));
+		img.addr[drawStart * img.size.x + rays_i] = tex.addr[((int)texPos & 63) * tex.size.x + tex_x];
 		drawStart++;
 		texPos += steptex;
 	}
 	for (int i = drawEnd + 1; i < SCREEN_H; i++)
-		set_px(img, (t_icoord){rays_i, i}, mlx->tex.f_color);
+		img.addr[i * img.size.x + rays_i] = mlx->tex.f_color;
 }
 
 int	raycast(t_mlx *mlx)
@@ -164,8 +164,7 @@ int	raycast(t_mlx *mlx)
 	t_fcoord	rayDir;
 
 	rays_i = 0;
-
-    //struct timeval te; 
+   // struct timeval te; 
     //gettimeofday(&te, NULL); // get current time
     //long long milliseconds = te.tv_sec*1000LL + te.tv_usec/1000; // calculate milliseconds
 	while (rays_i < SCREEN_W)

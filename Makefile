@@ -10,7 +10,7 @@ LIB			=	-Lmlx -lz -lmlx -framework OpenGL -framework Appkit
 
 CC			=	gcc
 INCLUDE		=	includes
-CFLAGS		=	-o3 -Wall -Wextra -Werror -Imlx -I$(INCLUDE) ##-fsanitize=address -g
+CFLAGS		=	-o3 -Wall -Wextra -Werror -Imlx -I$(INCLUDE) #-fsanitize=address -g
 RM			=	rm -f
 
 SRCS_DIR	=	srcs
@@ -29,7 +29,6 @@ SRCS		=	main.c 								\
 				$(PARSING_DIR)/read_file.c			\
 				$(RAYCAST_DIR)/minimap.c			\
 				$(RAYCAST_DIR)/raycast.c			\
-				$(RAYCAST_DIR)/px_utils.c			\
 				$(SRCS_DIR)/key.c					\
 				$(SRCS_DIR)/init.c
 

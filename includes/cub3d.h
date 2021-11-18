@@ -61,12 +61,12 @@ typedef struct s_fcoord
 }			t_fcoord;
 
 typedef struct s_data {
-	void		*img;
-	char		*addr;
-	int			bpp;
-	t_icoord	size;
-	int			line_len;
-	int			endian;
+	void			*img;
+	unsigned int	*addr;
+	int				bpp;
+	t_icoord		size;
+	int				line_len;
+	int				endian;
 }				t_data;
 
 typedef struct s_player

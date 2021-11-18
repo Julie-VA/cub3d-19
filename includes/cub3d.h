@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 15:14:33 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/18 16:28:24 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/18 16:34:35 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,10 +101,10 @@ typedef struct s_game
 
 typedef struct s_tex
 {
-	t_data	n;
-	t_data	s;
-	t_data	e;
-	t_data	w;
+	t_data			n;
+	t_data			s;
+	t_data			e;
+	t_data			w;
 	unsigned int	f_color;
 	unsigned int	c_color;
 	unsigned int	bg_c;
@@ -148,6 +148,7 @@ void			draw_player(int multipl, t_data buff, t_fcoord pos);
 t_icoord		print_minimap(char **minimap, t_data buff, unsigned int bg_c);
 
 // modgnl_utils
+int				get_next_line(int fd, char **line);
 int				ft_modstrlen(const char *s, int mod);
 char			*ft_modstrjoin(char const *s1, char const *s2);
 
@@ -189,8 +190,10 @@ int				free_all_but_mini(t_file *file);
 int				free_all(t_file *file);
 
 // init
+void			*game_init(t_file *file);
+int				hook_init(t_vars vars, t_tex tex, t_file *file, t_data buff);
 int				tex_init(t_file *file, void *mlx, t_tex *tex);
-t_player		*game_init(t_file *file);
+t_player		*player_init(t_file *file);
 
 // key_rotations
 void			key_r(t_game *g, float old_dirx, float old_planex);

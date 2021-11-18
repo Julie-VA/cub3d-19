@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 15:14:33 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/18 16:14:09 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/18 16:16:10 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,8 +128,8 @@ void			draw(int lineHeight, t_tex tex_s, unsigned int *buff,
 int				get_tex_x(int side, t_fcoord ray_dir,
 					float perpWallDist, const t_player *p);
 t_data			get_side_tex(int side, t_fcoord ray_dir, t_tex tex);
-int				tex_init(t_file *file, void *mlx, t_tex *tex);
 
+int				tex_init(t_file *file, void *mlx, t_tex *tex);
 t_player		*game_init(t_file *file);
 int				get_next_line(int fd, char **line);
 int				ft_modstrlen(const char *s, int mod);

@@ -6,7 +6,7 @@
 /*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/17 11:20:30 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/18 14:53:25 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/18 16:02:04 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,22 +20,22 @@ static t_player	player_init(t_file *file)
 	if (file->p_ori == 'N')
 	{
 		p.dir = (t_fcoord){0, -1};
-		p.plane = (t_fcoord){-0.66, 0};
+		p.plane = (t_fcoord){0.66, 0};
 	}
 	else if (file->p_ori == 'S')
 	{
 		p.dir = (t_fcoord){0, 1};
-		p.plane = (t_fcoord){0.66, 0};
+		p.plane = (t_fcoord){-0.66, 0};
 	}
 	else if (file->p_ori == 'W')
 	{
 		p.dir = (t_fcoord){1, 0};
-		p.plane = (t_fcoord){0, -0.66};
+		p.plane = (t_fcoord){0, 0.66};
 	}
 	else if (file->p_ori == 'E')
 	{
 		p.dir = (t_fcoord){-1, 0};
-		p.plane = (t_fcoord){0, 0.66};
+		p.plane = (t_fcoord){0, -0.66};
 	}
 	return (p);
 }

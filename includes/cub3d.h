@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 15:14:33 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/18 15:20:41 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/18 15:35:23 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,10 @@ typedef struct s_game
 
 typedef struct s_tex
 {
-	t_data			purple;
-	t_data			blue;
-	t_data			grey;
-	t_data			brick;
+	t_data	n;
+	t_data	s;
+	t_data	e;
+	t_data	w;
 	unsigned int	f_color;
 	unsigned int	c_color;
 	unsigned int	bg_c;
@@ -128,6 +128,7 @@ void			draw(int lineHeight, t_tex tex_s, unsigned int *buff,
 int				get_tex_x(int side, t_fcoord ray_dir,
 					float perpWallDist, const t_player *p);
 t_data			get_side_tex(int side, t_fcoord ray_dir, t_tex tex);
+int				tex_init(t_file *file, void *mlx, t_tex *tex);
 
 t_player		*game_init(t_file *file);
 int				get_next_line(int fd, char **line);

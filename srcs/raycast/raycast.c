@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/18 15:19:06 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/18 15:35:29 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ t_fcoord	get_ray_dir(int rays_i, t_player *p)
 	float		camera_x;
 
 	camera_x = 2 * rays_i / ((float)SCREEN_W) - 1;
+	camera_x = -camera_x;
 	ray_dir.x = p->dir.x + p->plane.x * camera_x;
 	ray_dir.y = p->dir.y + p->plane.y * camera_x;
 	return (ray_dir);

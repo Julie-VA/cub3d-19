@@ -6,7 +6,7 @@
 /*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 13:41:23 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/18 13:59:58 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/18 14:34:37 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,12 @@ int	get_tex_x(int side, t_fcoord ray_dir, float perpWallDist, const t_player *p)
 t_data	get_side_tex(int side, t_fcoord ray_dir, t_tex tex)
 {
 	if (side == 0 && ray_dir.x < 0)
-		return (tex.purple);
+		return (tex.e);
 	else if (side == 0 && ray_dir.x > 0)
-		return (tex.blue);
+		return (tex.w);
 	else if (side == 1 && ray_dir.y > 0)
-		return (tex.brick);
-	return (tex.grey);
+		return (tex.n);
+	return (tex.s);
 }
 
 /*

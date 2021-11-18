@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 15:20:18 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/18 15:49:01 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/18 16:01:50 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	hook_init(t_vars vars, t_tex tex, t_file *file, t_data buff)
 	game = malloc(sizeof(t_game));
 	*game = (t_game){game_init(file), file->map};
 	*mlxAll = (t_mlx){vars, tex, buff, *game, file->minimap, file->multipl};
-	mlx_hook(vars.win, 2, 1L << 0, key_pressnew, game);
+	mlx_hook(vars.win, 2, 1L << 0, key_press, game);
 	mlx_hook(vars.win, EVENT_DEST, 0, exit_game, NULL);
 	mlx_loop_hook(vars.mlx, raycast, mlxAll);
 	return (1);

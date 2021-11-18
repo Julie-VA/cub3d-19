@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 15:14:33 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/18 15:35:23 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/18 16:14:09 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,10 @@ int				check_after_space(char *line);
 int				check_if_player_on_border(t_file *file, int *i);
 int				check_last_line(char **raw_file);
 
-int				key_pressnew(int keycode, t_game *game);
+int				key_press(int keycode, t_game *game);
+
+void			key_r(t_game *g, float old_dirx, float old_planex);
+void			key_l(t_game *g, float old_dirx, float old_planex);
 
 char			**set_minimap(t_file *file);
 t_icoord		print_minimap(char **minimap, t_data buff, unsigned int bg_c);

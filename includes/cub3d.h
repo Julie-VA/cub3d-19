@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 15:14:33 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/18 16:16:10 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/18 16:28:24 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,6 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include "libft.h"
-
-// debug
-# include<sys/time.h>
 
 # define SCREEN_W 1920
 # define SCREEN_H 1080
@@ -123,52 +120,81 @@ typedef struct s_mlx
 	int			multipl;
 }	t_mlx;
 
+/*
+** parsing/
+*/
+
+// get_map_checks
+int				check_only_spaces(char *line);
+int				check_after_space(char *line);
+int				check_if_player_on_border(t_file *file, int *i);
+int				check_last_line(char **raw_file);
+
+// get_map
+int				get_map(t_file *map, int i);
+
+// get_textures_pos
+unsigned int	get_bg_color(char *color);
+int				get_textures(t_file *map);
+int				get_pos(t_file *map);
+
+// minimap_utils
+int				get_multipl(int height, int *maxl);
+char			**alloc_minimap(char **map, int *maxl, int *multipl);
+
+// minimap
+char			**set_minimap(t_file *file);
+void			draw_player(int multipl, t_data buff, t_fcoord pos);
+t_icoord		print_minimap(char **minimap, t_data buff, unsigned int bg_c);
+
+// modgnl_utils
+int				ft_modstrlen(const char *s, int mod);
+char			*ft_modstrjoin(char const *s1, char const *s2);
+
+// modgnl
+int				get_next_line(int fd, char **line);
+
+// parsing_utils
+int				get_map_height(char **map);
+int				check_around(char **map, int x, int y, int height);
+
+// parsing
+int				parsing(char *argv, t_file *map);
+
+// read_file
+int				check_cub(char *str);
+char			**read_file(char *argv);
+
+/*
+** raycast/
+*/
+
+// draw
 void			draw(int lineHeight, t_tex tex_s, unsigned int *buff,
 					unsigned int *tex);
 int				get_tex_x(int side, t_fcoord ray_dir,
 					float perpWallDist, const t_player *p);
 t_data			get_side_tex(int side, t_fcoord ray_dir, t_tex tex);
 
-int				tex_init(t_file *file, void *mlx, t_tex *tex);
-t_player		*game_init(t_file *file);
-int				get_next_line(int fd, char **line);
-int				ft_modstrlen(const char *s, int mod);
-char			*ft_modstrjoin(char const *s1, char const *s2);
-
-char			**read_file(char *argv);
-int				check_cub(char *str);
+// raycast
 int				raycast(t_mlx *mlx);
 
+/*
+** srcs/
+*/
+
+// free
 int				free_file(t_file *file);
 int				free_all_but_mini(t_file *file);
 int				free_all(t_file *file);
 
-int				parsing(char *argv, t_file *map);
+// init
+int				tex_init(t_file *file, void *mlx, t_tex *tex);
+t_player		*game_init(t_file *file);
 
-int				get_map_height(char **map);
-int				check_around(char **map, int x, int y, int height);
-
-unsigned int	get_bg_color(char *color);
-int				get_textures(t_file *map);
-int				get_pos(t_file *map);
-
-int				get_map(t_file *map, int i);
-
-int				check_only_spaces(char *line);
-int				check_after_space(char *line);
-int				check_if_player_on_border(t_file *file, int *i);
-int				check_last_line(char **raw_file);
-
-int				key_press(int keycode, t_game *game);
-
+// key_rotations
 void			key_r(t_game *g, float old_dirx, float old_planex);
 void			key_l(t_game *g, float old_dirx, float old_planex);
-
-char			**set_minimap(t_file *file);
-t_icoord		print_minimap(char **minimap, t_data buff, unsigned int bg_c);
-int				get_multipl(int height, int *maxl);
-char			**alloc_minimap(char **map, int *maxl, int *multipl);
-
-void			draw_player(int multipl, t_data buff, t_fcoord pos);
+int				key_press(int keycode, t_game *game);
 
 #endif

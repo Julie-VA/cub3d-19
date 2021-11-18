@@ -105,7 +105,7 @@ int	hook_init(t_vars vars, t_tex tex, t_file *file, t_data buff)
 	mlxAll = malloc(sizeof(t_mlx));
 	game = malloc(sizeof(t_game));
 	*game = (t_game){game_init(file), file->map};
-	*mlxAll = (t_mlx){vars, tex, buff, *game};
+	*mlxAll = (t_mlx){vars, tex, buff, *game, file->minimap};
 	mlx_hook(vars.win, 2, 1L << 0, key_pressnew, game);
 	mlx_hook(vars.win, EVENT_DEST, 0, exit_game, NULL);
 	mlx_loop_hook(vars.mlx, raycast, mlxAll);

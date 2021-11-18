@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vneirinc <vneirinc@students.s19.be>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 15:42:36 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/17 11:55:14 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/17 17:55:46 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,22 +135,21 @@ char	**set_minimap(t_file *file)
 	return (minimap);
 }
 
-/*
-t_icoord	print_minimap(t_file *file, t_data *buff, unsigned int bg_c)
+t_icoord	print_minimap(char **minimap, t_data buff, unsigned int bg_c)
 {
 	int	x;
 	int	y;
 
 	x = 0;
 	y = 0;
-	while (file->minimap[y])
+	while (minimap[y])
 	{
 		x = 0;
-		while (file->minimap[y][x])
+		while (minimap[y][x])
 		{
-			if (file->minimap[y][x] == '1')
+			if (minimap[y][x] == '1')
 				set_px(buff, (t_icoord){x, y}, 0);
-			else if (file->minimap[y][x] == '0')
+			else if (minimap[y][x] == '0')
 				set_px(buff, (t_icoord){x, y}, bg_c);
 			x++;
 		}
@@ -158,4 +157,3 @@ t_icoord	print_minimap(t_file *file, t_data *buff, unsigned int bg_c)
 	}
 	return ((t_icoord){x, y});
 }
-*/

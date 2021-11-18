@@ -9,6 +9,9 @@
 # include <fcntl.h>
 # include "libft.h"
 
+// debug
+# include<sys/time.h>
+
 #define SCREEN_W 1920
 #define SCREEN_H 1080
 #define EVENT_DEST 1
@@ -96,7 +99,11 @@ typedef struct s_mlx
 	t_tex		tex;
 	t_data		buff;
 	t_game		game;
+	char		**minimap;
 }				t_mlx;
+
+unsigned int	get_pixel(t_data data, t_icoord coord);
+void	set_px(t_data data, t_icoord coord, unsigned int color);
 
 t_player	*game_init(t_file *file);
 int		get_next_line(int fd, char **line);
@@ -130,6 +137,6 @@ int		check_last_line(char **raw_file);
 int		key_pressnew(int keycode, t_game *game);
 
 char	**set_minimap(t_file *file);
-t_icoord	print_minimap(t_file *file, t_data *buff, unsigned int bg_c);
+t_icoord	print_minimap(char **minimap, t_data buff, unsigned int bg_c);
 
 #endif

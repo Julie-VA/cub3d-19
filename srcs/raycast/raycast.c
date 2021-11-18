@@ -3,36 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vneirinc <vneirinc@students.s19.be>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/17 13:47:52 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/18 08:55:45 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-unsigned int	get_pixel(t_data data, t_icoord coord)
-{
-	char	*color;
-	int		offset;
-
-	offset = coord.y * data.line_len + coord.x * (data.bpp / 8);
-	color = data.addr + offset;
-	return (*(unsigned int *)color);
-}
-
-void	set_px(t_data data, t_icoord coord, unsigned int color)
-{
-	char	*dst;
-	int		offset;
-
-	if (coord.x < 0 || coord.x >= SCREEN_W || coord.y < 0 || coord.y >= SCREEN_H)
-		return;
-	offset = coord.y * data.line_len + coord.x * (data.bpp / 8);
-	dst = data.addr + offset;
-	*(unsigned int *)dst = color;
-}
 
 t_fcoord	get_ray_dir(int rays_i, t_player *p)
 {
@@ -73,29 +51,10 @@ t_fcoord	init_side_dist(t_fcoord rayDir, t_player *p, t_fcoord deltaDist, t_icoo
 	}
 	return (sideDist);
 }
-
-int	foo()
-{
-	float		perpWallDist;
-}
-
-int	loop_rays(t_game game, t_fcoord rayDir)
-{
-	t_fcoord	deltaDist;
-	int			side;
-
-	deltaDist.x = (rayDir.x == 0) ? 1e30 : fabs(1 / rayDir.x); 
-	deltaDist.y = (rayDir.y == 0) ? 1e30 : fabs(1 / rayDir.y); 
-
-	side = launch_rays(game, deltaDist, rayDir);
-	return side;
-}
-
-int	launch_rays(t_game game, t_fcoord deltaDist, t_fcoord rayDir)
+float	launch_rays(const t_game game, t_fcoord deltaDist, t_fcoord rayDir, int *side)
 {
 	int	hit = 0;
 	t_icoord	step;
-	int			side;
 	t_icoord	map;
 	t_fcoord	sideDist;
 
@@ -108,25 +67,40 @@ int	launch_rays(t_game game, t_fcoord deltaDist, t_fcoord rayDir)
 		{
 			sideDist.x += deltaDist.x;
 			map.x += step.x;
-			side = 0;
+			*side = 0;
 		}
 		else
 		{
 			sideDist.y += deltaDist.y;
 			map.y += step.y;
-			side = 1;
+			*side = 1;
 		}
 		if (game.map[map.y][map.x] == '1')
 			hit = 1;
 	}
-	if (side == 0)
-		perpWallDist = sideDist.x - deltaDist.x;
-	else
-		perpWallDist = sideDist.y - deltaDist.y;
-	return (side);
+	if (*side == 0)
+		return sideDist.x - deltaDist.x;
+	return sideDist.y - deltaDist.y;
 }
 
-int	get_tex_x(int side, t_fcoord rayDir, int perpWallDist, t_player *p)
+float	loop_rays(t_game game, t_fcoord rayDir, int *side)
+{
+	t_fcoord	deltaDist;
+	float	dist;
+
+	if (rayDir.x != 0)
+		deltaDist.x = fabs(1 / rayDir.x);
+	else
+		deltaDist.x = MAXFLOAT;
+	if (rayDir.y != 0)
+		deltaDist.y = fabs(1 / rayDir.y);
+	else
+		deltaDist.y = MAXFLOAT;
+	dist = launch_rays(game, deltaDist, rayDir, side);
+	return dist;
+}
+
+int	get_tex_x(int side, t_fcoord rayDir, float perpWallDist, const t_player *p)
 {
 	float	wall_x;
 	int		tex_x;
@@ -144,57 +118,72 @@ int	get_tex_x(int side, t_fcoord rayDir, int perpWallDist, t_player *p)
 	return (tex_x);
 }
 
+t_data	get_side_tex(int side, t_fcoord rayDir, t_tex tex)
+{
+	if (side == 0 && rayDir.x < 0)
+		return (tex.purple);
+	else if (side == 0 && rayDir.x > 0)
+		return (tex.blue);
+	else if (side == 1 && rayDir.y > 0)
+		return (tex.brick);
+	return (tex.grey);
+}
+
+void  draw(int lineHeight, t_mlx *mlx, int rays_i, t_data tex, int tex_x, t_data img)
+{
+	int	drawStart;
+	int	drawEnd;
+	float steptex;
+	float texPos;
+
+    drawStart = -lineHeight / 2 + SCREEN_H / 2;
+    drawEnd = lineHeight / 2 + SCREEN_H / 2;
+	if (drawStart < 0)
+		drawStart = 0;
+	if (drawEnd >= SCREEN_H)
+		drawEnd = SCREEN_H - 1;
+	steptex = 1.0 * 64 / lineHeight;
+	texPos = (drawStart - SCREEN_H / 2 + lineHeight / 2) * steptex;
+	for (int i = 0; i < drawStart; i++)
+		set_px(img, (t_icoord){rays_i, i}, mlx->tex.c_color);
+	while (drawStart <= drawEnd)
+	{
+		set_px(img, (t_icoord){rays_i, drawStart}, get_pixel(tex, (t_icoord) {tex_x, (int)texPos & 63}));
+		drawStart++;
+		texPos += steptex;
+	}
+	for (int i = drawEnd + 1; i < SCREEN_H; i++)
+		set_px(img, (t_icoord){rays_i, i}, mlx->tex.f_color);
+}
+
 int	raycast(t_mlx *mlx)
 {
-	int				rays_i = 0;
+	int			rays_i;
+	int			side;
+	float		perpWallDist;
+	t_fcoord	rayDir;
 
+	rays_i = 0;
+
+    //struct timeval te; 
+    //gettimeofday(&te, NULL); // get current time
+    //long long milliseconds = te.tv_sec*1000LL + te.tv_usec/1000; // calculate milliseconds
 	while (rays_i < SCREEN_W)
 	{
-		t_fcoord	rayDir;
-		t_fcoord	sideDist;
-		int			side;
-		float		perpWallDist;
-
 		rayDir = get_ray_dir(rays_i, mlx->game.p);
-		side = loop_rays(mlx->game, rayDir);
-		float	lineHeight = (int)(SCREEN_H / perpWallDist); 
-		int	drawStart = -lineHeight / 2 + SCREEN_H / 2;
-
-
-		if (drawStart < 0) drawStart = 0;
-
-		int	drawEnd = lineHeight / 2 + SCREEN_H / 2;
-
-		if (drawEnd >= SCREEN_H)
-			drawEnd = SCREEN_H - 1;
-
-		float steptex = 1.0 * 64 / lineHeight;
-		float texPos = (drawStart - SCREEN_H / 2 + lineHeight / 2) * steptex;
-
-		for (int i = 0; i < drawStart; i++)
-			set_px(mlx->buff, (t_icoord){rays_i, i}, mlx->tex.c_color);
-
-		t_data	tex;
-
-		if (side == 0 && rayDir.x < 0)
-			tex = mlx->tex.purple;
-		else if (side == 0 && rayDir.x > 0)
-			tex = mlx->tex.blue;
-		else if (side == 1 && rayDir.y > 0)
-			tex = mlx->tex.brick;
-		else
-			tex = mlx->tex.grey;
-		while (drawStart <= drawEnd)
-		{
-			set_px(mlx->buff, (t_icoord){rays_i, drawStart}, get_pixel(tex, (t_icoord) {tex_x, (int)texPos & 63}));
-			drawStart++;
-			texPos += steptex;
-		}
-		for (int i = drawEnd + 1; i < SCREEN_H; i++)
-			set_px(mlx->buff, (t_icoord){rays_i, i}, mlx->tex.f_color);
+		perpWallDist = loop_rays(mlx->game, rayDir, &side);
+		draw(
+			SCREEN_H / perpWallDist, mlx, rays_i,
+			get_side_tex(side, rayDir, mlx->tex),
+			get_tex_x(side, rayDir, perpWallDist, mlx->game.p),
+			mlx->buff
+			);
 		rays_i++;
 	}
-	//print_minimap(mlx->file, mlx->buff, mlx->tex.bg_c);
+	print_minimap(mlx->minimap, mlx->buff, mlx->tex.bg_c);
 	mlx_put_image_to_window(mlx->vars.mlx, mlx->vars.win, mlx->buff.img, 0, 0);
+    //gettimeofday(&te, NULL); // get current time
+    //long long ms2 = te.tv_sec*1000LL + te.tv_usec/1000; // calculate milliseconds
+	//printf("time: %llu\n", ms2 - milliseconds);
 	return 0;
 }

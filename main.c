@@ -63,14 +63,8 @@ int	main(int argc, char **argv)
 	buff.img = mlx_new_image(vars.mlx, SCREEN_W, SCREEN_H);
 	buff.size = (t_icoord) {SCREEN_W, SCREEN_H};
 	buff.addr = (unsigned int *)mlx_get_data_addr(buff.img, &buff.bpp, &buff.line_len, &buff.endian);
-	tex.purple.img = mlx_xpm_file_to_image(vars.mlx, "pics/purplestone.xpm", &(tex.purple.size.x), &(tex.purple.size.y));
-	tex.purple.addr = (unsigned int *)mlx_get_data_addr(tex.purple.img, &tex.purple.bpp, &tex.purple.line_len, &tex.purple.endian);
-	tex.blue.img = mlx_xpm_file_to_image(vars.mlx, "pics/bluestone.xpm", &(tex.blue.size.x), &(tex.blue.size.y));
-	tex.blue.addr = (unsigned int *)mlx_get_data_addr(tex.blue.img, &tex.blue.bpp, &tex.blue.line_len, &tex.blue.endian);
-	tex.grey.img = mlx_xpm_file_to_image(vars.mlx, "pics/greystone.xpm", &(tex.grey.size.x), &(tex.grey.size.y));
-	tex.grey.addr = (unsigned int *)mlx_get_data_addr(tex.grey.img, &tex.grey.bpp, &tex.grey.line_len, &tex.grey.endian);
-	tex.brick.img = mlx_xpm_file_to_image(vars.mlx, "pics/redbrick.xpm", &(tex.brick.size.x), &(tex.brick.size.y));
-	tex.brick.addr = (unsigned int *)mlx_get_data_addr(tex.brick.img, &tex.brick.bpp, &tex.brick.line_len, &tex.brick.endian);
+	if (!tex_init(file, vars.mlx, &tex))
+		return (1);
 	vars.win = mlx_new_window(vars.mlx, SCREEN_W, SCREEN_H, "cub3D");
 	hook_init(vars, tex, file, buff);
 	mlx_loop(vars.mlx);

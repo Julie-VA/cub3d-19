@@ -90,10 +90,10 @@ typedef struct s_game
 
 typedef struct s_tex
 {
-	t_data	purple;
-	t_data	blue;
-	t_data	grey;
-	t_data	brick;
+	t_data	n;
+	t_data	s;
+	t_data	e;
+	t_data	w;
 	unsigned int	f_color;
 	unsigned int	c_color;
 	unsigned int	bg_c;
@@ -108,6 +108,7 @@ typedef struct s_mlx
 	char		**minimap;
 }				t_mlx;
 
+int	tex_init(t_file *file, void *mlx, t_tex *tex);
 void	draw(int lineHeight, t_tex tex_s, unsigned int *buff, unsigned int *tex);
 int		get_tex_x(int side, t_fcoord ray_dir, float perpWallDist, const t_player *p);
 t_data	get_side_tex(int side, t_fcoord ray_dir, t_tex tex);

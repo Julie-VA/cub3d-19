@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 11:48:36 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/16 17:04:19 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/18 14:03:17 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,44 +32,45 @@ static int	check_top_bot(char **map, int x, int y, int height)
 	return (0);
 }
 
-static int	check_middle_loop(char **map, int x, int y, int height, int *start, int *player)
+static int	check_middle_loop(char **m, t_icoord xy, int vars[2], int *player)
 {
-	while (*start == 0 && map[y][x] == ' ')
-		x++;
-	if (*start == 0 && map[y][x] != '1')
+	while (vars[1] == 0 && m[xy.y][xy.x] == ' ')
+		xy.x++;
+	if (vars[1] == 0 && m[xy.y][xy.x] != '1')
 		return (-1);
-	*start = 1;
-	if (x == (int)ft_strlen(map[y]) - 1 && map[y][x] != '1')
+	vars[1] = 1;
+	if (xy.x == (int)ft_strlen(m[xy.y]) - 1 && m[xy.y][xy.x] != '1')
 		return (-1);
-	if (map[y][x] != '0' && map[y][x] != '1' && map[y][x] != ' '
-		&& map[y][x] != 'N' && map[y][x] != 'S'
-		&& map[y][x] != 'W' && map[y][x] != 'E')
+	if (m[xy.y][xy.x] != '0' && m[xy.y][xy.x] != '1' && m[xy.y][xy.x] != ' '
+		&& m[xy.y][xy.x] != 'N' && m[xy.y][xy.x] != 'S'
+		&& m[xy.y][xy.x] != 'W' && m[xy.y][xy.x] != 'E')
 		return (1);
-	if (map[y][x] == 'N' || map[y][x] == 'S'
-		|| map[y][x] == 'W' || map[y][x] == 'E')
+	if (m[xy.y][xy.x] == 'N' || m[xy.y][xy.x] == 'S'
+		|| m[xy.y][xy.x] == 'W' || m[xy.y][xy.x] == 'E')
 	{
-		if (*player == 1 || y == 0 || y == height || x == 0
-			|| x == (int)ft_strlen(map[y]))
+		if (*player == 1 || xy.y == 0 || xy.y == vars[0] || xy.x == 0
+			|| xy.x == (int)ft_strlen(m[xy.y]))
 			return (-1);
 		else
 			*player = 1;
 	}
-	if (map[y][x] == ' ')
-		if (check_around(map, x, y, height))
+	if (m[xy.y][xy.x] == ' ')
+		if (check_around(m, xy.x, xy.y, vars[0]))
 			return (-1);
-	x++;
-	return (x);
+	xy.x++;
+	return (xy.x);
 }
 
-static int	check_middle(char **map, int x, int y, int height, int *player)
+static int	check_middle(char **map, t_icoord xy, int height, int *player)
 {
-	int	start;
+	int	vars[2];
 
-	start = 0;
-	while (map[y][x] && x < (int)ft_strlen(map[y]))
+	vars[0] = height;
+	vars[1] = 0;
+	while (map[xy.y][xy.x] && xy.x < (int)ft_strlen(map[xy.y]))
 	{
-		x = check_middle_loop(map, x, y, height, &start, player);
-		if (x == -1)
+		xy.x = check_middle_loop(map, xy, vars, player);
+		if (xy.x == -1)
 			return (1);
 	}
 	return (0);
@@ -77,28 +78,27 @@ static int	check_middle(char **map, int x, int y, int height, int *player)
 
 static int	check_map(char **map)
 {
-	int	x;
-	int	y;
-	int	player;
-	int	height;
+	t_icoord	xy;
+	int			player;
+	int			height;
 
-	y = 0;
+	xy.y = 0;
 	player = 0;
 	height = get_map_height(map) - 1;
-	while (map[y])
+	while (map[xy.y])
 	{
-		x = 0;
-		if (y == 0 || y == height)
+		xy.x = 0;
+		if (xy.y == 0 || xy.y == height)
 		{
-			if (check_top_bot(map, x, y, height))
+			if (check_top_bot(map, xy.x, xy.y, height))
 				return (1);
 		}
 		else
 		{
-			if (check_middle(map, x, y, height, &player))
+			if (check_middle(map, xy, height, &player))
 				return (1);
 		}
-		y++;
+		xy.y++;
 	}
 	return (0);
 }

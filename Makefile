@@ -10,7 +10,7 @@ LIB			=	-Lmlx -lz -lmlx -framework OpenGL -framework Appkit
 
 CC			=	gcc
 INCLUDE		=	includes
-CFLAGS		=	-Wall -Wextra -Werror -I$(INCLUDE) ##-fsanitize=address -g
+CFLAGS		=	-o3 -Wall -Wextra -Werror -Imlx -I$(INCLUDE) #-fsanitize=address -g
 RM			=	rm -f
 
 SRCS_DIR	=	srcs
@@ -22,14 +22,16 @@ SRCS		=	main.c 								\
 				$(PARSING_DIR)/get_map.c			\
 				$(PARSING_DIR)/get_map_checks.c		\
 				$(PARSING_DIR)/get_textures_pos.c	\
+				$(PARSING_DIR)/minimap.c			\
+				$(PARSING_DIR)/minimap_utils.c		\
 				$(PARSING_DIR)/modgnl_utils.c		\
 				$(PARSING_DIR)/modgnl.c				\
 				$(PARSING_DIR)/parsing.c			\
 				$(PARSING_DIR)/parsing_utils.c		\
 				$(PARSING_DIR)/read_file.c			\
-				$(RAYCAST_DIR)/minimap.c			\
 				$(RAYCAST_DIR)/raycast.c			\
-				$(SRCS_DIR)/key.c
+				$(SRCS_DIR)/key.c					\
+				$(SRCS_DIR)/init.c
 
 OBJS		=	$(SRCS:%.c=%.o)
 

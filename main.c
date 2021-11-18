@@ -14,107 +14,31 @@ int	exit_game(void *arg)
 	return (1);
 }
 
-int     key_press(int keycode, char **map)
+int	hook_init(t_vars vars, t_tex tex, t_file *file, t_data buff)
 {
-	if (keycode == KEY_ESC)
-	{
-		system("leaks cub3D");
-		exit(1);
-	}
-	if (keycode == KEY_W)
-	{
-		if (map[(int)ppos.y][(int)(ppos.x + pdir.x * 0.2)] != '1')
-			ppos.x += pdir.x * 0.2;
-		if (map[(int)(ppos.y + pdir.y * 0.2)][(int)ppos.x] != '1')
-			ppos.y += pdir.y * 0.2;
-	}
-	if (keycode == KEY_S)
-	{
-		if (map[(int)ppos.y][(int)(ppos.x - pdir.x * 0.2)] != '1')
-			ppos.x -= pdir.x * 0.2;
-		if (map[(int)(ppos.y - pdir.y * 0.2)][(int)ppos.x] != '1')
-			ppos.y -= pdir.y * 0.2;
-	}
-	if (keycode == KEY_D)
-	{
-		if (map[(int)ppos.y][(int)(ppos.x + pdir.x * cos(1.5708))] != '1')
-		{
-			ppos.x += pdir.x * cos(1.5708);
-			if (map[(int)ppos.y][(int)(ppos.x + (pdir.x * cos(-1.5708) - pdir.y * sin(-1.5708)) * 0.2)] != '1')
-				ppos.x += (pdir.x * cos(-1.5708) - pdir.y * sin(-1.5708)) * 0.2;
-
-		}
-		if (map[(int)(ppos.y + pdir.y * 0.2)][(int)ppos.x] != '1')
-		{
-			ppos.y += pdir.y * 0.2;
-			if (map[(int)(ppos.y + (pdir.x * sin(-1.5708) + pdir.y * cos(-1.5708)) * 0.2)][(int)ppos.x] != '1')
-				ppos.y += (pdir.x * sin(-1.5708) + pdir.y * cos(-1.5708)) * 0.2;
-		}
-	}
-	if (keycode == KEY_A)
-	{
-		if (map[(int)ppos.y][(int)(ppos.x + pdir.x * cos(1.5708))] != '1')
-		{
-			ppos.x += pdir.x * cos(1.5708);
-			if (map[(int)ppos.y][(int)(ppos.x - (pdir.x * cos(-1.5708) - pdir.y * sin(-1.5708)) * 0.2)] != '1')
-				ppos.x -= (pdir.x * cos(-1.5708) - pdir.y * sin(-1.5708)) * 0.2;
-		}
-		if (map[(int)(ppos.y + pdir.y * 0.2)][(int)ppos.x] != '1')
-		{
-			ppos.y += pdir.y * 0.2;
-			if (map[(int)(ppos.y - (pdir.x * sin(-1.5708) + pdir.y * cos(-1.5708)) * 0.2)][(int)ppos.x] != '1')
-				ppos.y -= (pdir.x * sin(-1.5708) + pdir.y * cos(-1.5708)) * 0.2;
-		}
-	}
-	if (keycode == KEY_R)
-	{
-		double  oldDirx = pdir.x;
-
-		pdir.x = pdir.x * cos(-0.1) - pdir.y * sin(-0.1);
-		pdir.y = oldDirx * sin(-0.1) + pdir.y * cos(-0.1);
-
-		double  oldPlaneX = pplane.x;
-
-		pplane.x = pplane.x * cos(-0.1) - pplane.y * sin(-0.1);
-		pplane.y = oldPlaneX * sin(-0.1) + pplane.y * cos(-0.1);
-	}
-	if (keycode == KEY_L)
-	{
-		double  oldDirx = pdir.x;
-		double  oldPlaneX = pplane.x;
-
-		pdir.x = pdir.x * cos(0.1) - pdir.y * sin(0.1);
-		pdir.y = oldDirx * sin(0.1) + pdir.y * cos(0.1);
-
-		pplane.x = pplane.x * cos(0.1) - pplane.y * sin(0.1);
-		pplane.y = oldPlaneX * sin(0.1) + pplane.y * cos(0.1);
-	}
-	return (0);
-}
-
-void	hook_init(void *mlx, void *win, t_data *purple, t_data *blue, t_data *grey, t_data *brick, t_file *file, t_data *buff)
-{
-	unsigned int	bg_c;
-
-	bg_c = get_bg_color("96, 96, 96");
-	t_mlx	*mlxAll = malloc(sizeof(t_mlx));
-	*mlxAll = (t_mlx){win, mlx, purple, blue, grey, brick, buff, file, bg_c};
-
-	mlx_hook(win, 2, 1L << 0, key_press, file->map);
-	mlx_hook(win, EVENT_DEST, 0, exit_game, NULL);
-	mlx_loop_hook(mlx, raycast, mlxAll);
+	t_mlx			*mlxAll;
+	t_game			*game;
+	
+	tex.bg_c = get_bg_color("96, 96, 96");
+	tex.c_color = file->c_color;
+	tex.f_color = file->f_color;
+	mlxAll = malloc(sizeof(t_mlx));
+	game = malloc(sizeof(t_game));
+	*game = (t_game){game_init(file), file->map};
+	*mlxAll = (t_mlx){vars, tex, buff, *game, file->minimap};
+	mlx_hook(vars.win, 2, 1L << 0, key_pressnew, game);
+	mlx_hook(vars.win, EVENT_DEST, 0, exit_game, NULL);
+	mlx_loop_hook(vars.mlx, raycast, mlxAll);
+	return (1);
 }
 
 int	main(int argc, char **argv)
 {
 	t_file	*file;
-	void	*mlx;
-	void	*mlx_win;
-	t_data	purple;
-	t_data	blue;
-	t_data	grey;
-	t_data	brick;
+	t_vars	vars;
+	t_tex	tex;
 	t_data	buff;
+
 
 	if (argc != 2)
 	{
@@ -135,43 +59,20 @@ int	main(int argc, char **argv)
 		system("leaks cub3D");
 		return (1);
 	}
-	mlx = mlx_init();
-	ppos = (t_fcoord) {file->p_pos_x + 0.5, file->p_pos_y + 0.5};
-	//directions start
-	if (file->p_ori == 'N')
-	{
-		pdir = (t_fcoord) {0, -1};
-		pplane = (t_fcoord) {-0.66, 0};
-	}
-	else if (file->p_ori == 'S')
-	{
-		pdir = (t_fcoord) {0, 1};
-		pplane = (t_fcoord) {0.66, 0};
-	}
-	else if (file->p_ori == 'W')
-	{
-		pdir = (t_fcoord) {1, 0};
-		pplane = (t_fcoord) {0, -0.66};
-	}
-	else if (file->p_ori == 'E')
-	{
-		pdir = (t_fcoord) {-1, 0};
-		pplane = (t_fcoord) {0, 0.66};
-	}
-	//directions end
-	mlx_win = mlx_new_window(mlx, SCREEN_W, SCREEN_H, "cub3D");
-	buff.img = mlx_new_image(mlx, SCREEN_W, SCREEN_H);
-	buff.addr = mlx_get_data_addr(buff.img, &buff.bpp, &buff.line_len, &buff.endian);
-	purple.img = mlx_xpm_file_to_image(mlx, "pics/purplestone.xpm", &(purple.size.x), &(purple.size.y));
-	purple.addr = mlx_get_data_addr(purple.img, &purple.bpp, &purple.line_len, &purple.endian);
-	blue.img = mlx_xpm_file_to_image(mlx, "pics/bluestone.xpm", &(blue.size.x), &(blue.size.y));
-	blue.addr = mlx_get_data_addr(blue.img, &blue.bpp, &blue.line_len, &blue.endian);
-	grey.img = mlx_xpm_file_to_image(mlx, "pics/greystone.xpm", &(grey.size.x), &(grey.size.y));
-	grey.addr = mlx_get_data_addr(grey.img, &grey.bpp, &grey.line_len, &grey.endian);
-	brick.img = mlx_xpm_file_to_image(mlx, "pics/redbrick.xpm", &(brick.size.x), &(brick.size.y));
-	brick.addr = mlx_get_data_addr(brick.img, &brick.bpp, &brick.line_len, &brick.endian);
-	hook_init(mlx, mlx_win, &purple, &blue, &grey, &brick, file, &buff);
-	mlx_loop(mlx);
-	free_all(file);
+	vars.mlx = mlx_init();
+	buff.img = mlx_new_image(vars.mlx, SCREEN_W, SCREEN_H);
+	buff.size = (t_icoord) {SCREEN_W, SCREEN_H};
+	buff.addr = (unsigned int *)mlx_get_data_addr(buff.img, &buff.bpp, &buff.line_len, &buff.endian);
+	tex.purple.img = mlx_xpm_file_to_image(vars.mlx, "pics/purplestone.xpm", &(tex.purple.size.x), &(tex.purple.size.y));
+	tex.purple.addr = (unsigned int *)mlx_get_data_addr(tex.purple.img, &tex.purple.bpp, &tex.purple.line_len, &tex.purple.endian);
+	tex.blue.img = mlx_xpm_file_to_image(vars.mlx, "pics/bluestone.xpm", &(tex.blue.size.x), &(tex.blue.size.y));
+	tex.blue.addr = (unsigned int *)mlx_get_data_addr(tex.blue.img, &tex.blue.bpp, &tex.blue.line_len, &tex.blue.endian);
+	tex.grey.img = mlx_xpm_file_to_image(vars.mlx, "pics/greystone.xpm", &(tex.grey.size.x), &(tex.grey.size.y));
+	tex.grey.addr = (unsigned int *)mlx_get_data_addr(tex.grey.img, &tex.grey.bpp, &tex.grey.line_len, &tex.grey.endian);
+	tex.brick.img = mlx_xpm_file_to_image(vars.mlx, "pics/redbrick.xpm", &(tex.brick.size.x), &(tex.brick.size.y));
+	tex.brick.addr = (unsigned int *)mlx_get_data_addr(tex.brick.img, &tex.brick.bpp, &tex.brick.line_len, &tex.brick.endian);
+	vars.win = mlx_new_window(vars.mlx, SCREEN_W, SCREEN_H, "cub3D");
+	hook_init(vars, tex, file, buff);
+	mlx_loop(vars.mlx);
 	return (0);
 }

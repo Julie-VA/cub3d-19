@@ -9,6 +9,9 @@
 # include <fcntl.h>
 # include "libft.h"
 
+// debug
+# include<sys/time.h>
+
 #define SCREEN_W 1920
 #define SCREEN_H 1080
 #define EVENT_DEST 1
@@ -39,6 +42,12 @@ typedef struct s_file
 	char			**minimap;
 }	t_file;
 
+typedef struct	s_vars
+{
+	void	*mlx;
+	void	*win;
+}				t_vars;
+
 typedef struct s_icoord
 {
 	int	x;
@@ -47,19 +56,23 @@ typedef struct s_icoord
 
 typedef struct s_fcoord
 {
-	double	x;
-	double	y;
+	float	x;
+	float	y;
 }			t_fcoord;
 
+typedef struct	s_group
+{
+	t_icoord	xy;
+	t_icoord	ij;
+}	t_group;
+
 typedef struct s_data {
-	void		*img;
-	void		*bg;
-	char		*addr;
-	int			bpp;
-	t_icoord	size;
-	t_icoord	size_bg;
-	int			line_len;
-	int			endian;
+	void			*img;
+	unsigned int	*addr;
+	int				bpp;
+	t_icoord		size;
+	int				line_len;
+	int				endian;
 }				t_data;
 
 typedef struct s_player
@@ -71,61 +84,68 @@ typedef struct s_player
 
 typedef struct s_game
 {
-	t_player	player;
-	char**		map;
+	t_player	*p;
+	char		**map;
 }		t_game;
 
+typedef struct s_tex
+{
+	t_data	purple;
+	t_data	blue;
+	t_data	grey;
+	t_data	brick;
+	unsigned int	f_color;
+	unsigned int	c_color;
+	unsigned int	bg_c;
+}			t_tex;
 
 typedef struct s_mlx
 {
-	void*		win;
-	void*		mlx;
-	t_data		*purple;
-	t_data		*blue;
-	t_data		*grey;
-	t_data		*brick;
-	t_data		*buff;
-	t_file		*file;
-	unsigned int	bg_c;
+	t_vars		vars;
+	t_tex		tex;
+	t_data		buff;
+	t_game		game;
+	char		**minimap;
 }				t_mlx;
 
-t_fcoord ppos;
-t_fcoord pdir;
-t_fcoord pplane;
+unsigned int	get_pixel(t_data data, t_icoord coord);
+void			set_px(t_data data, t_icoord coord, unsigned int color);
 
-void	set_px(t_data *data, t_icoord coord, unsigned int color);
+t_player		*game_init(t_file *file);
+int				get_next_line(int fd, char **line);
+int				ft_modstrlen(const char *s, int mod);
+char			*ft_modstrjoin(char const *s1, char const *s2);
 
-int		get_next_line(int fd, char **line);
-int		ft_modstrlen(const char *s, int mod);
-char	*ft_modstrjoin(char const *s1, char const *s2);
+char			**read_file(char *argv);
+int				check_cub(char *str);
+int				raycast(t_mlx *mlx);
 
-char	**read_file(char *argv);
-int		check_cub(char *str);
-int		raycast(t_mlx *mlx);
+int				free_file(t_file *file);
+int				free_all_but_mini(t_file *file);
+int				free_all(t_file *file);
 
-int		free_file(t_file *file);
-int		free_all_but_mini(t_file *file);
-int		free_all(t_file *file);
+int				parsing(char *argv, t_file *map);
 
-int		parsing(char *argv, t_file *map);
-
-int		get_map_height(char **map);
-int		check_around(char **map, int x, int y, int height);
+int				get_map_height(char **map);
+int				check_around(char **map, int x, int y, int height);
 
 unsigned int	get_bg_color(char *color);
-int		get_textures(t_file *map);
-int		get_pos(t_file *map);
+int				get_textures(t_file *map);
+int				get_pos(t_file *map);
 
-int		get_map(t_file *map, int i);
+int				get_map(t_file *map, int i);
 
-int		check_only_spaces(char *line);
-int		check_after_space(char *line);
-int		check_if_player_on_border(t_file *file, int *i);
-int		check_last_line(char **raw_file);
+int				check_only_spaces(char *line);
+int				check_after_space(char *line);
+int				check_if_player_on_border(t_file *file, int *i);
+int				check_last_line(char **raw_file);
 
-int		key_pressnew(int keycode, t_game *game);
+int				key_pressnew(int keycode, t_game *game);
 
-char	**set_minimap(t_file *file);
-t_icoord	print_minimap(t_file *file, t_data *buff, unsigned int bg_c);
+char			**set_minimap(t_file *file);
+t_icoord		print_minimap(char **minimap, t_data buff, unsigned int bg_c);
+int				get_multipl(int height, int *maxl);
+char			**alloc_minimap(char **map, int *maxl, int *multipl);
+
 
 #endif

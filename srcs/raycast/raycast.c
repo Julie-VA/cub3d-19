@@ -6,157 +6,190 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/16 18:56:35 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/18 11:57:36 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-unsigned int	get_pixel(t_data *data, t_icoord coord)
+t_fcoord	get_ray_dir(int rays_i, t_player *p)
 {
-	char	*color;
-	int		offset;
+	t_fcoord	ray_dir;
+	float		camera_x;
 
-	offset = coord.y * data->line_len + coord.x * (data->bpp / 8);
-	color = data->addr + offset;
-	return (*(unsigned int *)color);
+	camera_x = 2 * rays_i / ((float)SCREEN_W) - 1;
+	ray_dir.x = p->dir.x + p->plane.x * camera_x;
+	ray_dir.y = p->dir.y + p->plane.y * camera_x;
+	return (ray_dir);
 }
 
-void	set_px(t_data *data, t_icoord coord, unsigned int color)
+t_fcoord	init_side_dist(t_fcoord ray_dir, t_player *p,
+	t_fcoord delta_dist, t_icoord *step)
 {
-	char	*dst;
-	int		offset;
+	t_fcoord	side_dist;
+	t_icoord	map;
 
-	if (coord.x < 0 || coord.x >= SCREEN_W || coord.y < 0 || coord.y >= SCREEN_H)
-		return;
-	offset = coord.y * data->line_len + coord.x * (data->bpp / 8);
-	dst = data->addr + offset;
-	*(unsigned int *)dst = color;
+	map.x = (int)p->pos.x;
+	map.y = (int)p->pos.y;
+	if (ray_dir.x < 0)
+	{
+		step->x = -1;
+		side_dist.x = (p->pos.x - map.x) * delta_dist.x;
+	}
+	else
+	{
+		step->x = 1;
+		side_dist.x = (map.x + 1.0 - p->pos.x) * delta_dist.x;
+	}
+	if (ray_dir.y < 0)
+	{
+		step->y = -1;
+		side_dist.y = (p->pos.y - map.y) * delta_dist.y;
+	}
+	else
+	{
+		step->y = 1;
+		side_dist.y = (map.y + 1.0 - p->pos.y) * delta_dist.y;
+	}
+	return (side_dist);
+}
+
+float	launch_rays(const t_game game, t_fcoord delta_dist,
+	t_fcoord ray_dir, int *side)
+{
+	int			hit;
+	t_icoord	step;
+	t_icoord	map;
+	t_fcoord	side_dist;
+
+	hit = 0;
+	map.x = (int)game.p->pos.x;
+	map.y = (int)game.p->pos.y;
+	side_dist = init_side_dist(ray_dir, game.p, delta_dist, &step);
+	while (!hit)
+	{
+		if (side_dist.x < side_dist.y)
+		{
+			side_dist.x += delta_dist.x;
+			map.x += step.x;
+			*side = 0;
+		}
+		else
+		{
+			side_dist.y += delta_dist.y;
+			map.y += step.y;
+			*side = 1;
+		}
+		if (game.map[map.y][map.x] == '1')
+			hit = 1;
+	}
+	if (*side == 0)
+		return (side_dist.x - delta_dist.x);
+	return (side_dist.y - delta_dist.y);
+}
+
+float	loop_rays(t_game game, t_fcoord ray_dir, int *side)
+{
+	t_fcoord	delta_dist;
+
+	if (ray_dir.x != 0)
+		delta_dist.x = fabs(1 / ray_dir.x);
+	else
+		delta_dist.x = MAXFLOAT;
+	if (ray_dir.y != 0)
+		delta_dist.y = fabs(1 / ray_dir.y);
+	else
+		delta_dist.y = MAXFLOAT;
+	return (launch_rays(game, delta_dist, ray_dir, side));
+}
+
+int	get_tex_x(int side, t_fcoord ray_dir, float perpWallDist, const t_player *p)
+{
+	float	wall_x;
+	int		tex_x;
+
+	if (side == 0)
+		wall_x = p->pos.y + perpWallDist * ray_dir.y;
+	else
+		wall_x = p->pos.x + perpWallDist * ray_dir.x;
+	wall_x -= floor(wall_x);
+	tex_x = wall_x * 64;
+	if (side == 0 && ray_dir.x > 0)
+		tex_x = 64 - tex_x - 1;
+	if (side == 1 && ray_dir.y < 0)
+		tex_x = 64 - tex_x - 1;
+	return (tex_x);
+}
+
+t_data	get_side_tex(int side, t_fcoord ray_dir, t_tex tex)
+{
+	if (side == 0 && ray_dir.x < 0)
+		return (tex.purple);
+	else if (side == 0 && ray_dir.x > 0)
+		return (tex.blue);
+	else if (side == 1 && ray_dir.y > 0)
+		return (tex.brick);
+	return (tex.grey);
+}
+
+void	draw(int lineHeight, t_mlx *mlx, int rays_i,
+	t_data tex, int tex_x, t_data img)
+{
+	int		draw_start;
+	int		draw_end;
+	float	steptex;
+	float	texpos;
+	int		i;
+
+	i = 0;
+	draw_start = -lineHeight / 2 + SCREEN_H / 2;
+	draw_end = lineHeight / 2 + SCREEN_H / 2;
+	if (draw_start < 0)
+		draw_start = 0;
+	if (draw_end >= SCREEN_H)
+		draw_end = SCREEN_H - 1;
+	steptex = 1.0 * 64 / lineHeight;
+	texpos = (draw_start - SCREEN_H / 2 + lineHeight / 2) * steptex;
+	while (i < draw_start)
+		img.addr[i++ * img.size.x + rays_i] = mlx->tex.c_color;
+	while (i <= draw_end)
+	{
+		// normi bug
+		img.addr[i * img.size.x + rays_i] = tex.addr[((int)texpos & 63) * tex.size.x + tex_x];
+		i++;
+		texpos += steptex;
+	}
+	while (i < SCREEN_H)
+		img.addr[i++ * img.size.x + rays_i] = mlx->tex.f_color;
 }
 
 int	raycast(t_mlx *mlx)
 {
-	int				rays_i = 0;
-	t_icoord		map_size;
+	int			rays_i;
+	int			side;
+	float		perpWallDist;
+	t_fcoord	ray_dir;
 
-	map_size = print_minimap(mlx->file, mlx->buff, mlx->bg_c);
+	rays_i = 0;
+   // struct timeval te; 
+    //gettimeofday(&te, NULL); // get current time
+    //long long milliseconds = te.tv_sec*1000LL + te.tv_usec/1000; // calculate milliseconds
 	while (rays_i < SCREEN_W)
 	{
-		double		cameraX = 2 * rays_i / ((double)SCREEN_W) - 1;;
-		t_fcoord	rayDir;
-		t_fcoord	sideDist;
-		t_fcoord	deltaDist;
-
-		rayDir.x = pdir.x + pplane.x * cameraX;
-		rayDir.y = pdir.y + pplane.y * cameraX;
-
-		deltaDist.x = (rayDir.x == 0) ? 1e30 : fabs(1 / rayDir.x); 
-		deltaDist.y = (rayDir.y == 0) ? 1e30 : fabs(1 / rayDir.y); 
-		double	perpWallDist;
-
-		t_icoord	step;
-		t_icoord	map;
-		int			hit = 0;
-		int			side;
-
-		map.x = (int)ppos.x; 
-		map.y = (int)ppos.y; 
-
-		if (rayDir.x < 0)
-		{
-			step.x = -1;
-			sideDist.x = (ppos.x - map.x) * deltaDist.x;
-		}
-		else
-		{
-			step.x = 1;
-			sideDist.x = (map.x + 1.0 - ppos.x) * deltaDist.x;
-		}
-		if (rayDir.y < 0)
-		{
-			step.y = -1;
-			sideDist.y = (ppos.y - map.y) * deltaDist.y;
-		}
-		else
-		{
-			step.y = 1;
-			sideDist.y = (map.y + 1.0 - ppos.y) * deltaDist.y;
-		}
-		while(!hit)
-		{
-			if (sideDist.x < sideDist.y)
-			{
-				sideDist.x += deltaDist.x;
-				map.x += step.x;
-				side = 0;
-			}
-			else
-			{
-				sideDist.y += deltaDist.y;
-				map.y += step.y;
-				side = 1;
-			}
-			if (mlx->file->map[map.y][map.x] == '1')
-				hit = 1;
-		}
-		if (side == 0)
-			perpWallDist = sideDist.x - deltaDist.x;
-		else
-			perpWallDist = sideDist.y - deltaDist.y;
-
-		double wall_x;
-
-		if (side == 0)
-			wall_x = ppos.y + perpWallDist * rayDir.y;
-		else
-			wall_x = ppos.x + perpWallDist * rayDir.x;
-		wall_x -= floor(wall_x);
-
-		int	tex_x = wall_x * 64;
-
-		if(side == 0 && rayDir.x > 0) tex_x = 64 - tex_x - 1;
-		if(side == 1 && rayDir.y < 0) tex_x = 64 - tex_x - 1;
-
-		double	lineHeight = (int)(SCREEN_H / perpWallDist); 
-		int	drawStart = -lineHeight / 2 + SCREEN_H / 2;
-
-
-		if (drawStart < 0) drawStart = 0;
-
-		int	drawEnd = lineHeight / 2 + SCREEN_H / 2;
-
-		if (drawEnd >= SCREEN_H)
-			drawEnd = SCREEN_H - 1;
-
-		double steptex = 1.0 * 64 / lineHeight;
-		double texPos = (drawStart - SCREEN_H / 2 + lineHeight / 2) * steptex;
-
-		for (int i = 0; i < drawStart; i++)
-			if (i >= map_size.y || rays_i >= map_size.x || mlx->file->minimap[i][rays_i] == ' ')
-				set_px(mlx->buff, (t_icoord){rays_i, i}, mlx->file->c_color);
-
-		t_data	*tex;
-
-		if (side == 0 && rayDir.x < 0)
-			tex = mlx->purple;
-		else if (side == 0 && rayDir.x > 0)
-			tex = mlx->blue;
-		else if (side == 1 && rayDir.y > 0)
-			tex = mlx->brick;
-		else
-			tex = mlx->grey;
-		while (drawStart <= drawEnd)
-		{
-			if (drawStart >= map_size.y || rays_i >= map_size.x || mlx->file->minimap[drawStart][rays_i] == ' ')
-				set_px(mlx->buff, (t_icoord){rays_i, drawStart}, get_pixel(tex, (t_icoord) {tex_x, (int)texPos & 63}));
-			drawStart++;
-			texPos += steptex;
-		}
-		for (int i = drawEnd + 1; i < SCREEN_H; i++)
-			if (i >= map_size.y || rays_i >= map_size.x || mlx->file->minimap[i][rays_i] == ' ')
-				set_px(mlx->buff, (t_icoord){rays_i, i}, mlx->file->f_color);
+		ray_dir = get_ray_dir(rays_i, mlx->game.p);
+		perpWallDist = loop_rays(mlx->game, ray_dir, &side);
+		draw(
+			SCREEN_H / perpWallDist, mlx, rays_i,
+			get_side_tex(side, ray_dir, mlx->tex),
+			get_tex_x(side, ray_dir, perpWallDist, mlx->game.p),
+			mlx->buff
+			);
 		rays_i++;
 	}
-	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->buff->img, 0, 0);
+	print_minimap(mlx->minimap, mlx->buff, mlx->tex.bg_c);
+	mlx_put_image_to_window(mlx->vars.mlx, mlx->vars.win, mlx->buff.img, 0, 0);
+    //gettimeofday(&te, NULL); // get current time
+    //long long ms2 = te.tv_sec*1000LL + te.tv_usec/1000; // calculate milliseconds
+	//printf("time: %llu\n", ms2 - milliseconds);
 	return 0;
 }

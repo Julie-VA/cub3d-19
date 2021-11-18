@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 15:42:36 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/16 18:47:50 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/16 19:03:23 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,11 @@ char **alloc_minimap(char **map, int *maxl, int *multipl)
 	}
 	minimap[i] = NULL;
 	return (minimap);
+}
+
+int	loop_x()
+{
+	
 }
 
 char	**set_minimap(t_file *file)

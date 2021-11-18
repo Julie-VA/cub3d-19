@@ -40,6 +40,7 @@ typedef struct s_file
 	int				p_pos_y;
 	char			p_ori;
 	char			**minimap;
+	int				multipl;
 }	t_file;
 
 typedef struct	s_vars
@@ -106,10 +107,12 @@ typedef struct s_mlx
 	t_data		buff;
 	t_game		game;
 	char		**minimap;
+	int			multipl;
 }				t_mlx;
 
-unsigned int	get_pixel(t_data data, t_icoord coord);
-void			set_px(t_data data, t_icoord coord, unsigned int color);
+void	draw(int lineHeight, t_tex tex_s, unsigned int *buff, unsigned int *tex);
+int		get_tex_x(int side, t_fcoord ray_dir, float perpWallDist, const t_player *p);
+t_data	get_side_tex(int side, t_fcoord ray_dir, t_tex tex);
 
 t_player		*game_init(t_file *file);
 int				get_next_line(int fd, char **line);
@@ -146,6 +149,8 @@ char			**set_minimap(t_file *file);
 t_icoord		print_minimap(char **minimap, t_data buff, unsigned int bg_c);
 int				get_multipl(int height, int *maxl);
 char			**alloc_minimap(char **map, int *maxl, int *multipl);
+
+void	draw_player(int multipl, t_data buff, t_player *p);
 
 
 #endif

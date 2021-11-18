@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/18 11:57:36 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/18 14:36:42 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,7 @@ t_fcoord	init_side_dist(t_fcoord ray_dir, t_player *p,
 	t_fcoord	side_dist;
 	t_icoord	map;
 
-	map.x = (int)p->pos.x;
-	map.y = (int)p->pos.y;
+	map = (t_icoord){p->pos.x, p->pos.y};
 	if (ray_dir.x < 0)
 	{
 		step->x = -1;
@@ -57,16 +56,13 @@ t_fcoord	init_side_dist(t_fcoord ray_dir, t_player *p,
 float	launch_rays(const t_game game, t_fcoord delta_dist,
 	t_fcoord ray_dir, int *side)
 {
-	int			hit;
 	t_icoord	step;
 	t_icoord	map;
 	t_fcoord	side_dist;
 
-	hit = 0;
-	map.x = (int)game.p->pos.x;
-	map.y = (int)game.p->pos.y;
+	map = (t_icoord){game.p->pos.x, game.p->pos.y};
 	side_dist = init_side_dist(ray_dir, game.p, delta_dist, &step);
-	while (!hit)
+	while (game.map[map.y][map.x] != '1')
 	{
 		if (side_dist.x < side_dist.y)
 		{
@@ -80,8 +76,6 @@ float	launch_rays(const t_game game, t_fcoord delta_dist,
 			map.y += step.y;
 			*side = 1;
 		}
-		if (game.map[map.y][map.x] == '1')
-			hit = 1;
 	}
 	if (*side == 0)
 		return (side_dist.x - delta_dist.x);
@@ -103,93 +97,28 @@ float	loop_rays(t_game game, t_fcoord ray_dir, int *side)
 	return (launch_rays(game, delta_dist, ray_dir, side));
 }
 
-int	get_tex_x(int side, t_fcoord ray_dir, float perpWallDist, const t_player *p)
-{
-	float	wall_x;
-	int		tex_x;
-
-	if (side == 0)
-		wall_x = p->pos.y + perpWallDist * ray_dir.y;
-	else
-		wall_x = p->pos.x + perpWallDist * ray_dir.x;
-	wall_x -= floor(wall_x);
-	tex_x = wall_x * 64;
-	if (side == 0 && ray_dir.x > 0)
-		tex_x = 64 - tex_x - 1;
-	if (side == 1 && ray_dir.y < 0)
-		tex_x = 64 - tex_x - 1;
-	return (tex_x);
-}
-
-t_data	get_side_tex(int side, t_fcoord ray_dir, t_tex tex)
-{
-	if (side == 0 && ray_dir.x < 0)
-		return (tex.purple);
-	else if (side == 0 && ray_dir.x > 0)
-		return (tex.blue);
-	else if (side == 1 && ray_dir.y > 0)
-		return (tex.brick);
-	return (tex.grey);
-}
-
-void	draw(int lineHeight, t_mlx *mlx, int rays_i,
-	t_data tex, int tex_x, t_data img)
-{
-	int		draw_start;
-	int		draw_end;
-	float	steptex;
-	float	texpos;
-	int		i;
-
-	i = 0;
-	draw_start = -lineHeight / 2 + SCREEN_H / 2;
-	draw_end = lineHeight / 2 + SCREEN_H / 2;
-	if (draw_start < 0)
-		draw_start = 0;
-	if (draw_end >= SCREEN_H)
-		draw_end = SCREEN_H - 1;
-	steptex = 1.0 * 64 / lineHeight;
-	texpos = (draw_start - SCREEN_H / 2 + lineHeight / 2) * steptex;
-	while (i < draw_start)
-		img.addr[i++ * img.size.x + rays_i] = mlx->tex.c_color;
-	while (i <= draw_end)
-	{
-		// normi bug
-		img.addr[i * img.size.x + rays_i] = tex.addr[((int)texpos & 63) * tex.size.x + tex_x];
-		i++;
-		texpos += steptex;
-	}
-	while (i < SCREEN_H)
-		img.addr[i++ * img.size.x + rays_i] = mlx->tex.f_color;
-}
-
 int	raycast(t_mlx *mlx)
 {
 	int			rays_i;
 	int			side;
-	float		perpWallDist;
+	float		perp_wall_dist;
 	t_fcoord	ray_dir;
 
 	rays_i = 0;
-   // struct timeval te; 
-    //gettimeofday(&te, NULL); // get current time
-    //long long milliseconds = te.tv_sec*1000LL + te.tv_usec/1000; // calculate milliseconds
 	while (rays_i < SCREEN_W)
 	{
 		ray_dir = get_ray_dir(rays_i, mlx->game.p);
-		perpWallDist = loop_rays(mlx->game, ray_dir, &side);
+		perp_wall_dist = loop_rays(mlx->game, ray_dir, &side);
 		draw(
-			SCREEN_H / perpWallDist, mlx, rays_i,
-			get_side_tex(side, ray_dir, mlx->tex),
-			get_tex_x(side, ray_dir, perpWallDist, mlx->game.p),
-			mlx->buff
+			SCREEN_H / perp_wall_dist, mlx->tex,
+			mlx->buff.addr + rays_i,
+			get_side_tex(side, ray_dir, mlx->tex).addr
+			+ get_tex_x(side, ray_dir, perp_wall_dist, mlx->game.p)
 			);
 		rays_i++;
 	}
 	print_minimap(mlx->minimap, mlx->buff, mlx->tex.bg_c);
+	draw_player(mlx->multipl, mlx->buff, mlx->game.p);
 	mlx_put_image_to_window(mlx->vars.mlx, mlx->vars.win, mlx->buff.img, 0, 0);
-    //gettimeofday(&te, NULL); // get current time
-    //long long ms2 = te.tv_sec*1000LL + te.tv_usec/1000; // calculate milliseconds
-	//printf("time: %llu\n", ms2 - milliseconds);
-	return 0;
+	return (0);
 }

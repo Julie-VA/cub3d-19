@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 15:14:33 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/18 18:02:45 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/18 18:06:33 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,6 @@ typedef struct s_mlx
 	t_data		buff;
 	t_game		*game;
 	t_file		*file;
-	// char		**minimap;
-	// int			multipl;
 }	t_mlx;
 
 /*

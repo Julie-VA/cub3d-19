@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
+/*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 15:20:18 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/19 11:24:24 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/19 12:19:02 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ int	main(int argc, char **argv)
 	if (argc != 2)
 	{
 		if (argc < 2)
-			write(2, "Missing map\n", 11);
+			write(2, "Error\nMissing map file\n", 23);
 		else if (argc > 2)
-			write(2, "Too many arguments\n", 19);
+			write(2, "Error\nToo many arguments\n", 25);
 		return (1);
 	}
 	if (!check_cub(argv[1]))

@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 11:51:32 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/15 15:52:45 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/19 12:10:08 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,11 @@ int	get_map(t_file *file, int i)
 	{
 		if (check_if_player_on_border(file, &i))
 			break ;
+	}
+	if (!file->raw_file[i])
+	{
+		write(2, "Error\nNo map found\n", 19);
+		return (1);
 	}
 	o = check_last_line(file->raw_file);
 	save = i;

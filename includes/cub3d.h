@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
+/*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 15:14:33 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/19 11:02:09 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/19 12:05:16 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ int				check_last_line(char **raw_file);
 int				get_map(t_file *map, int i);
 
 // get_textures_pos
-unsigned int	get_bg_color(char *color);
+unsigned int	get_bg_color(char *color, int *check);
 int				get_textures(t_file *map);
 int				get_pos(t_file *map);
 
@@ -186,7 +186,7 @@ int				raycast(t_mlx *mlx);
 
 // free
 int				free_file(t_file *file);
-int				free_all_but_mini(t_file *file);
+int				free_all_but_mini(t_file *file, int mod);
 int				free_all(t_file *file);
 int				exit_game(t_mlx *mlx);
 

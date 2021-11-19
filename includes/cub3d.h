@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 15:14:33 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/19 12:05:16 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/19 12:44:41 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,9 @@ typedef struct s_mlx
 /*
 ** parsing/
 */
+
+//ft_strcmp_space
+int				ft_strncmp_space(const char *s1, const char *s2, size_t n);
 
 // get_map_checks
 int				check_only_spaces(char *line);

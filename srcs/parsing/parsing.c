@@ -54,7 +54,7 @@ static int	check_middle_loop(char **m, t_icoord xy, int vars[2], int *player)
 		else
 			*player = 1;
 	}
-	if (m[xy.y][xy.x] == ' ')
+	if (is_space(m[xy.y][xy.x]))
 		if (check_around(m, xy.x, xy.y, vars[0]))
 			return (-1);
 	xy.x++;

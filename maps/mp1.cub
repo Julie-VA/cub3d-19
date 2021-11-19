@@ -4,7 +4,7 @@ WE ./textures/redbrick.xpm
 EA ./textures/wood.xpm
 
 F 80,141,79
-C 90,180,204
+C 80,141,79
 
 11111111
 10000011

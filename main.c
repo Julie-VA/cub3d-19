@@ -6,7 +6,7 @@
 /*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 15:20:18 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/19 11:02:15 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/19 11:24:24 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,5 @@ int	main(int argc, char **argv)
 	mlx = game_init(file);
 	if (mlx)
 		mlx_loop(mlx);
+	free_all(file);
 	return (1);
-}

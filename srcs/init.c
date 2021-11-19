@@ -6,7 +6,7 @@
 /*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/17 11:20:30 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/19 10:41:20 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/19 11:22:01 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,9 +114,15 @@ void	*game_init(t_file *file)
 	buff.addr = (unsigned int *)mlx_get_data_addr(buff.img, &buff.bpp,
 			&buff.line_len, &buff.endian);
 	if (!tex_init(file, vars.mlx, &tex))
+	{
+		mlx_destroy_image(vars.mlx, buff.img);
 		return (NULL);
+	}
 	vars.win = mlx_new_window(vars.mlx, SCREEN_W, SCREEN_H, "cub3D");
-	if (!hook_init(vars, tex, file, buff))
-		return (NULL);
-	return (vars.mlx);
+	if (vars.win && hook_init(vars, tex, file, buff))
+		return (vars.mlx);
+	mlx_destroy_image(vars.mlx, buff.img);
+	if (vars.win)
+		mlx_destroy_window(vars.mlx, vars.win);
+	return (NULL);
 }

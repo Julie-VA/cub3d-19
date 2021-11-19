@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 15:14:03 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/18 15:14:14 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/19 10:54:29 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,17 @@ int	free_all(t_file *file)
 		free(file->minimap[i++]);
 	free(file->minimap);
 	return (1);
+}
+
+int	exit_game(t_mlx *mlx)
+{
+	//free_all(mlx->file);
+	free(mlx->game.p);
+	mlx_destroy_image(mlx->vars.mlx, mlx->tex.n.img);
+	mlx_destroy_image(mlx->vars.mlx, mlx->tex.s.img);
+	mlx_destroy_image(mlx->vars.mlx, mlx->tex.w.img);
+	mlx_destroy_image(mlx->vars.mlx, mlx->tex.e.img);
+	mlx_destroy_image(mlx->vars.mlx, mlx->buff.img);
+	mlx_destroy_window(mlx->vars.mlx, mlx->vars.win);
+	exit(0);
 }

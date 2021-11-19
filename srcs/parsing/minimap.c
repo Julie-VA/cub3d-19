@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
+/*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 15:42:36 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/18 15:11:28 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/19 11:01:36 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	draw_player(int multipl, t_data buff, t_fcoord pos)
 	}
 }
 
-t_icoord	print_minimap(char **minimap, t_data buff, unsigned int bg_c)
+t_icoord	print_minimap(char **minimap, t_data buff)
 {
 	int	x;
 	int	y;
@@ -118,9 +118,9 @@ t_icoord	print_minimap(char **minimap, t_data buff, unsigned int bg_c)
 		while (minimap[y][x])
 		{
 			if (minimap[y][x] == '1')
-				buff.addr[y * buff.size.x + x] = 0x11000000;
+				buff.addr[y * buff.size.x + x] = 0x0;
 			else if (minimap[y][x] == '0')
-				buff.addr[y * buff.size.x + x] = bg_c;
+				buff.addr[y * buff.size.x + x] = 0x606060;
 			x++;
 		}
 		y++;

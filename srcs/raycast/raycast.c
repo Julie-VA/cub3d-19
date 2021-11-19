@@ -6,7 +6,7 @@
 /*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 14:58:20 by vneirinc          #+#    #+#             */
-/*   Updated: 2021/11/18 16:28:49 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/19 11:02:03 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,8 +117,8 @@ int	raycast(t_mlx *mlx)
 			);
 		rays_i++;
 	}
-	print_minimap(mlx->minimap, mlx->buff, mlx->tex.bg_c);
-	draw_player(mlx->multipl, mlx->buff, mlx->game.p->pos);
+	print_minimap(mlx->file->minimap, mlx->buff);
+	draw_player(mlx->file->multipl, mlx->buff, mlx->game.p->pos);
 	mlx_put_image_to_window(mlx->vars.mlx, mlx->vars.win, mlx->buff.img, 0, 0);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 13:36:45 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/18 13:40:48 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/18 17:47:06 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	**alloc_minimap(char **map, int *maxl, int *multipl)
 
 	*maxl = get_maxl(map);
 	height = get_map_height(map);
-	*multipl = get_multipl(height, multipl);
+	*multipl = get_multipl(height, maxl);
 	minimap = (char **)malloc(sizeof(char *) * ((height * *multipl) + 1));
 	if (!minimap)
 		return (NULL);

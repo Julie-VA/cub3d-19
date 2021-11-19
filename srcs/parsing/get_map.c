@@ -37,17 +37,26 @@ static int	rem_trailing_spaces(char **map, char **raw_file, int end)
 	return (0);
 }
 
+static int	looping(char **raw_file, int i)
+{
+	while (raw_file[i])
+	{
+		if (check_only_spaces(raw_file[i]))
+			return (i - 1);
+		i++;
+	}
+	return (i);
+}
+
 int	get_map(t_file *file, int i)
 {
 	int	save;
 	int	o;
 
 	while (file->raw_file[i] && (file->raw_file[i][0] != '1'
-		&& file->raw_file[i][0] != '0' && check_after_space(file->raw_file[i])))
-	{
-		if (check_if_player_on_border(file, &i))
-			break ;
-	}
+		&& file->raw_file[i][0] != '0' && check_after_space(file->raw_file[i]))
+		&& !check_if_player_on_border(file, &i))
+		;
 	if (!file->raw_file[i])
 	{
 		write(2, "Error\nNo map found\n", 19);
@@ -55,15 +64,7 @@ int	get_map(t_file *file, int i)
 	}
 	o = check_last_line(file->raw_file);
 	save = i;
-	while (file->raw_file[i])
-	{
-		if (check_only_spaces(file->raw_file[i]))
-		{
-			i--;
-			break ;
-		}
-		i++;
-	}
+	i = looping(file->raw_file, i);
 	file->map = (char **)malloc(sizeof(char *) * (i - save + 2));
 	if (!file->map)
 		return (1);

@@ -49,7 +49,7 @@ int	hook_init(t_vars vars, t_tex tex, t_file *file, t_data buff)
 
 int	main(int argc, char **argv)
 {
-t_file	*file;
+	t_file	*file;
 	void	*mlx;
 
 	if (argc != 2)

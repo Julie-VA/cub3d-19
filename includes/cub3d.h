@@ -154,6 +154,8 @@ char			*ft_modstrjoin(char const *s1, char const *s2);
 int				get_next_line(int fd, char **line);
 
 // parsing_utils
+
+int				is_space(char c);
 int				get_map_height(char **map);
 int				check_around(char **map, int x, int y, int height);
 

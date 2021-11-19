@@ -19,7 +19,7 @@ int	check_only_spaces(char *line)
 	i = 0;
 	while (line[i])
 	{
-		if (line[i] != ' ' && line[i] != '\n')
+		if (!is_space(line[i]) && line[i] != '\n')
 			return (0);
 		i++;
 	}
@@ -31,7 +31,7 @@ int	check_after_space(char *line)
 	int	i;
 
 	i = 0;
-	while (line[i] == ' ')
+	while (is_space(line[i]))
 		i++;
 	if (line[i] == '1' || line[i] == '0' || line[i] == 'N'
 		|| line[i] == 'S' || line[i] == 'W' || line[i] == 'E')

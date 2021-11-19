@@ -19,7 +19,7 @@ t_group	mini_loop_x(t_file *file, char **mini, t_group v, t_icoord mamu)
 	{
 		if (file->map[v.xy.y][v.xy.x] == '1')
 			mini[v.ij.y + (v.xy.y * mamu.y)][v.ij.x + (v.xy.x * mamu.y)] = '1';
-		else if (file->map[v.xy.y][v.xy.x] == ' ')
+		else if (is_space(file->map[v.xy.y][v.xy.x]))
 			mini[v.ij.y + (v.xy.y * mamu.y)][v.ij.x + (v.xy.x * mamu.y)] = ' ';
 		else
 			mini[v.ij.y + (v.xy.y * mamu.y)][v.ij.x + (v.xy.x * mamu.y)] = '0';

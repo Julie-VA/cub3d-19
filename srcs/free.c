@@ -54,7 +54,7 @@ int	free_all(t_file *file)
 
 int	exit_game(t_mlx *mlx)
 {
-	//free_all(mlx->file);
+	free_all(mlx->file);
 	free(mlx->game.p);
 	mlx_destroy_image(mlx->vars.mlx, mlx->tex.n.img);
 	mlx_destroy_image(mlx->vars.mlx, mlx->tex.s.img);

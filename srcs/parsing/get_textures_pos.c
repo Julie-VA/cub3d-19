@@ -6,13 +6,13 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 11:50:28 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/16 15:23:13 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/19 12:16:30 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-unsigned int	get_bg_color(char *color)
+unsigned int	get_bg_color(char *color, int *check)
 {
 	char	**rgb;
 	int		r;
@@ -27,6 +27,12 @@ unsigned int	get_bg_color(char *color)
 	free(rgb[1]);
 	free(rgb[2]);
 	free(rgb);
+	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
+	{
+		write(2, "Error\nInvalid texture color\n", 28);
+		*check = 1;
+		return (0);
+	}
 	return ((r << 16) | (g << 8) | b);
 }
 
@@ -54,6 +60,9 @@ static char	*get_each_texture(t_file *file, char *prefix, int offset)
 
 int	get_textures(t_file *file)
 {
+	int	check;
+
+	check = 0;
 	file->n_texture = get_each_texture(file, "NO", 2);
 	file->s_texture = get_each_texture(file, "SO", 2);
 	file->w_texture = get_each_texture(file, "WE", 2);
@@ -63,11 +72,13 @@ int	get_textures(t_file *file)
 	if (!file->n_texture || !file->s_texture || !file->w_texture
 		|| !file->e_texture || !file->f_str || !file->c_str)
 	{
-		write(2, "Missing or invalid texture path(s)\n", 35);
+		write(2, "Error\nMissing or invalid texture path(s)\n", 41);
 		return (1);
 	}
-	file->f_color = get_bg_color(file->f_str);
-	file->c_color = get_bg_color(file->c_str);
+	file->f_color = get_bg_color(file->f_str, &check);
+	file->c_color = get_bg_color(file->c_str, &check);
+	if (check == 1)
+		return (1);
 	return (0);
 }
 
@@ -101,6 +112,6 @@ int	get_pos(t_file *file)
 		}
 		y++;
 	}
-	write(1, "No player position or invalid orientation\n", 42);
+	write(2, "Error\nNo player position or invalid orientation\n", 48);
 	return (1);
 }

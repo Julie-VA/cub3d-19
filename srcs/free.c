@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
+/*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 15:14:03 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/19 10:54:29 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/19 12:05:24 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	free_file(t_file *file)
 	return (1);
 }
 
-int	free_all_but_mini(t_file *file)
+int	free_all_but_mini(t_file *file, int mod)
 {
 	int	i;
 
@@ -32,10 +32,13 @@ int	free_all_but_mini(t_file *file)
 	while (file->raw_file[i])
 		free(file->raw_file[i++]);
 	free(file->raw_file);
-	i = 0;
-	while (file->map[i])
-		free(file->map[i++]);
-	free(file->map);
+	if (mod == 1)
+	{
+		i = 0;
+		while (file->map[i])
+			free(file->map[i++]);
+		free(file->map);
+	}
 	free(file);
 	return (1);
 }
@@ -45,16 +48,16 @@ int	free_all(t_file *file)
 	int	i;
 
 	i = 0;
-	free_all_but_mini(file);
 	while (file->minimap[i])
 		free(file->minimap[i++]);
 	free(file->minimap);
+	free_all_but_mini(file, 1);
 	return (1);
 }
 
 int	exit_game(t_mlx *mlx)
 {
-	//free_all(mlx->file);
+	free_all(mlx->file);
 	free(mlx->game.p);
 	mlx_destroy_image(mlx->vars.mlx, mlx->tex.n.img);
 	mlx_destroy_image(mlx->vars.mlx, mlx->tex.s.img);

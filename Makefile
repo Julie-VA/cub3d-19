@@ -6,11 +6,11 @@ LIBFT		=	$(addprefix $(LIBFT_DIR), $(LIBFT_A))
 
 MLX			=	mlx/libmlx.a
 MLX_DIR		=	mlx/
-LIB			=	-Lmlx -lz -lmlx -framework OpenGL -framework Appkit
+LIB			=	-Lmlx -lz -lmlx -framework OpenGL -framework Appkit 
 
 CC			=	gcc
 INCLUDE		=	includes
-CFLAGS		=	-o3 -Wall -Wextra -Werror -Imlx -I$(INCLUDE)
+CFLAGS		=	-o3 -Wall -Wextra -Werror -Imlx -I$(INCLUDE) -fsanitize=address -g
 RM			=	rm -f
 
 SRCS_DIR	=	srcs

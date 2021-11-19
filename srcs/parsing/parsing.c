@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 11:48:36 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/18 14:03:17 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/19 12:16:41 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,18 +112,18 @@ int	parsing(char *argv, t_file *file)
 	if (!file->raw_file)
 		return (1);
 	if (get_textures(file))
-		return (free_all_but_mini(file));
+		return (free_all_but_mini(file, 0));
 	if (get_map(file, i))
 		return (1);
 	if (check_map(file->map))
 	{
-		write(2, "Invalid map\n", 12);
-		return (free_all_but_mini(file));
+		write(2, "Error\nInvalid map\n", 18);
+		return (free_all_but_mini(file, 1));
 	}
 	if (get_pos(file))
-		return (free_all_but_mini(file));
+		return (free_all_but_mini(file, 1));
 	file->minimap = set_minimap(file);
 	if (!file->minimap)
-		return (free_all_but_mini(file));
+		return (free_all_but_mini(file, 1));
 	return (0);
 }

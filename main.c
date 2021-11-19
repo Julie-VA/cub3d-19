@@ -6,7 +6,7 @@
 /*   By: rvan-aud <rvan-aud@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 15:20:18 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/19 12:13:20 by rvan-aud         ###   ########.fr       */
+/*   Updated: 2021/11/19 12:19:02 by rvan-aud         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	hook_init(t_vars vars, t_tex tex, t_file *file, t_data buff)
 
 int	main(int argc, char **argv)
 {
-	t_file	*file;
+t_file	*file;
 	void	*mlx;
 
 	if (argc != 2)

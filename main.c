@@ -6,7 +6,7 @@
 /*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 15:20:18 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/18 17:07:18 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/19 10:35:43 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 t_file	*init_t_file(void)
 {
 	t_file	*file;
+
 	file = (t_file *)malloc(sizeof(t_file));
 	if (!file)
 		return (NULL);
@@ -32,8 +33,8 @@ int	exit_game(void *arg)
 
 int	hook_init(t_vars vars, t_tex tex, t_file *file, t_data buff)
 {
-	t_mlx			*mlx_all;
-	t_game			*game;
+	t_mlx		*mlx_all;
+	t_player	*p;
 
 	tex.bg_c = get_bg_color("96, 96, 96");
 	tex.c_color = file->c_color;
@@ -41,15 +42,15 @@ int	hook_init(t_vars vars, t_tex tex, t_file *file, t_data buff)
 	mlx_all = malloc(sizeof(t_mlx));
 	if (!mlx_all)
 		return (0);
-	game = malloc(sizeof(t_game));
-	if (!game)
+	p = player_init(file);
+	if (!p)
 	{
 		free(mlx_all);
 		return (0);
 	}
-	*game = (t_game){player_init(file), file->map};
-	*mlx_all = (t_mlx){vars, tex, buff, *game, file->minimap, file->multipl};
-	mlx_hook(vars.win, 2, 1L << 0, key_press, game);
+	*mlx_all = (t_mlx){vars, tex, buff, p, file->map,
+		file->minimap, file->multipl};
+	mlx_hook(vars.win, 2, 1L << 0, key_press, mlx_all);
 	mlx_hook(vars.win, EVENT_DEST, 0, exit_game, NULL);
 	mlx_loop_hook(vars.mlx, raycast, mlx_all);
 	return (1);
@@ -76,5 +77,5 @@ int	main(int argc, char **argv)
 	mlx = game_init(file);
 	if (mlx)
 		mlx_loop(mlx);
-	return (0);
+	return (1);
 }

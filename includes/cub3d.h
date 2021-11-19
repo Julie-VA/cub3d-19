@@ -6,7 +6,7 @@
 /*   By: vneirinc <vneirinc@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 15:14:33 by rvan-aud          #+#    #+#             */
-/*   Updated: 2021/11/18 17:13:57 by vneirinc         ###   ########.fr       */
+/*   Updated: 2021/11/19 10:33:45 by vneirinc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,12 +96,6 @@ typedef struct s_player
 	t_fcoord	plane;
 }	t_player;
 
-typedef struct s_game
-{
-	t_player	*p;
-	char		**map;
-}	t_game;
-
 typedef struct s_tex
 {
 	t_data			n;
@@ -118,7 +112,8 @@ typedef struct s_mlx
 	t_vars		vars;
 	t_tex		tex;
 	t_data		buff;
-	t_game		game;
+	t_player	*p;
+	char		**map;
 	char		**minimap;
 	int			multipl;
 }	t_mlx;
@@ -162,10 +157,10 @@ int				check_after_space(char *line);
 int				check_if_player_on_border(t_file *file, int *i);
 int				check_last_line(char **raw_file);
 
-int				key_press(int keycode, t_game *game);
+int				key_press(int keycode, t_mlx *mlx);
 
-void			key_r(t_game *g, float old_dirx, float old_planex);
-void			key_l(t_game *g, float old_dirx, float old_planex);
+void			key_r(t_player *p, float old_dirx, float old_planex);
+void			key_l(t_player *p, float old_dirx, float old_planex);
 
 char			**set_minimap(t_file *file);
 t_icoord		print_minimap(char **minimap, t_data buff, unsigned int bg_c);

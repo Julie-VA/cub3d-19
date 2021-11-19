@@ -18,13 +18,13 @@ static int	check_top_bot(char **map, int x, int y, int height)
 
 	start = 0;
 	while (map[y][x] && x < (int)ft_strlen(map[y]))
-	{	
-		while (start == 0 && map[y][x] == ' ')
+	{
+		while (start == 0 && is_space(map[y][x]))
 			x++;
 		start = 1;
-		if (map[y][x] != '1' && map[y][x] != ' ')
+		if (map[y][x] != '1' && !is_space(map[y][x]))
 			return (1);
-		if (map[y][x] == ' ')
+		if (is_space(map[y][x]))
 			if (check_around(map, x, y, height))
 				return (1);
 		x++;
@@ -34,16 +34,16 @@ static int	check_top_bot(char **map, int x, int y, int height)
 
 static int	check_middle_loop(char **m, t_icoord xy, int vars[2], int *player)
 {
-	while (vars[1] == 0 && m[xy.y][xy.x] == ' ')
+	while (!vars[1] && is_space(m[xy.y][xy.x]))
 		xy.x++;
 	if (vars[1] == 0 && m[xy.y][xy.x] != '1')
 		return (-1);
 	vars[1] = 1;
 	if (xy.x == (int)ft_strlen(m[xy.y]) - 1 && m[xy.y][xy.x] != '1')
 		return (-1);
-	if (m[xy.y][xy.x] != '0' && m[xy.y][xy.x] != '1' && m[xy.y][xy.x] != ' '
-		&& m[xy.y][xy.x] != 'N' && m[xy.y][xy.x] != 'S'
-		&& m[xy.y][xy.x] != 'W' && m[xy.y][xy.x] != 'E')
+	if (m[xy.y][xy.x] != '0' && m[xy.y][xy.x] != '1' && !is_space(m[xy.y][xy.x])
+		&& m[xy.y][xy.x] != 'N' && m[xy.y][xy.x] != 'S' && m[xy.y][xy.x] != 'W'
+		&& m[xy.y][xy.x] != 'E')
 		return (1);
 	if (m[xy.y][xy.x] == 'N' || m[xy.y][xy.x] == 'S'
 		|| m[xy.y][xy.x] == 'W' || m[xy.y][xy.x] == 'E')

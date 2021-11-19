@@ -22,7 +22,7 @@ static int	rem_trailing_spaces(char **map, char **raw_file, int end)
 	while (i <= end)
 	{
 		len = ft_strlen(raw_file[i]);
-		while (raw_file[i][--len] == ' ')
+		while (is_space(raw_file[i][--len]))
 			;
 		map[i] = (char *)malloc(sizeof(char) * (len + 2));
 		if (!map[i])

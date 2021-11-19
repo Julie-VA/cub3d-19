@@ -45,11 +45,11 @@ static char	*get_each_texture(t_file *file, char *prefix, int offset)
 	while (file->raw_file[i])
 	{
 		j = 0;
-		while (file->raw_file[i][j] == ' ')
+		while (is_space(file->raw_file[i][j]))
 			j++;
 		if (!ft_strncmp_space(prefix, file->raw_file[i], offset))
 		{
-			while (file->raw_file[i][offset + j] == ' ')
+			while (is_space(file->raw_file[i][offset + j]))
 				offset++;
 			return (file->raw_file[i] + (offset + j));
 		}
